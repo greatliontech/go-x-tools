@@ -5,7 +5,7 @@
 //go:build ignore
 
 // This file provides an example command for static checkers
-// conforming to the golang.org/x/tools/go/analysis API.
+// conforming to the github.com/greatliontech/go-x-tools/go/analysis API.
 // It serves as a model for the behavior of the cmd/vet tool in $GOROOT.
 // Being based on the unitchecker driver, it must be run by go vet:
 //
@@ -16,38 +16,38 @@
 package main
 
 import (
-	"golang.org/x/tools/go/analysis/unitchecker"
+	"github.com/greatliontech/go-x-tools/go/analysis/unitchecker"
 
-	"golang.org/x/tools/go/analysis/passes/appends"
-	"golang.org/x/tools/go/analysis/passes/asmdecl"
-	"golang.org/x/tools/go/analysis/passes/assign"
-	"golang.org/x/tools/go/analysis/passes/atomic"
-	"golang.org/x/tools/go/analysis/passes/bools"
-	"golang.org/x/tools/go/analysis/passes/buildtag"
-	"golang.org/x/tools/go/analysis/passes/cgocall"
-	"golang.org/x/tools/go/analysis/passes/composite"
-	"golang.org/x/tools/go/analysis/passes/copylock"
-	"golang.org/x/tools/go/analysis/passes/directive"
-	"golang.org/x/tools/go/analysis/passes/errorsas"
-	"golang.org/x/tools/go/analysis/passes/framepointer"
-	"golang.org/x/tools/go/analysis/passes/httpresponse"
-	"golang.org/x/tools/go/analysis/passes/ifaceassert"
-	"golang.org/x/tools/go/analysis/passes/loopclosure"
-	"golang.org/x/tools/go/analysis/passes/lostcancel"
-	"golang.org/x/tools/go/analysis/passes/nilfunc"
-	"golang.org/x/tools/go/analysis/passes/printf"
-	"golang.org/x/tools/go/analysis/passes/shift"
-	"golang.org/x/tools/go/analysis/passes/sigchanyzer"
-	"golang.org/x/tools/go/analysis/passes/stdmethods"
-	"golang.org/x/tools/go/analysis/passes/stringintconv"
-	"golang.org/x/tools/go/analysis/passes/structtag"
-	"golang.org/x/tools/go/analysis/passes/testinggoroutine"
-	"golang.org/x/tools/go/analysis/passes/tests"
-	"golang.org/x/tools/go/analysis/passes/timeformat"
-	"golang.org/x/tools/go/analysis/passes/unmarshal"
-	"golang.org/x/tools/go/analysis/passes/unreachable"
-	"golang.org/x/tools/go/analysis/passes/unsafeptr"
-	"golang.org/x/tools/go/analysis/passes/unusedresult"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/appends"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/asmdecl"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/assign"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/atomic"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/bools"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/buildtag"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/cgocall"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/composite"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/copylock"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/directive"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/errorsas"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/framepointer"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/httpresponse"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/ifaceassert"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/loopclosure"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/lostcancel"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/nilfunc"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/printf"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/shift"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/sigchanyzer"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/stdmethods"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/stringintconv"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/structtag"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/testinggoroutine"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/tests"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/timeformat"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/unmarshal"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/unreachable"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/unsafeptr"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/unusedresult"
 )
 
 func main() {

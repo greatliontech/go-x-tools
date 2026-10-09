@@ -22,9 +22,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/greatliontech/go-x-tools/internal/gocommand"
+	"github.com/greatliontech/go-x-tools/internal/imports"
 	"golang.org/x/telemetry/counter"
-	"golang.org/x/tools/internal/gocommand"
-	"golang.org/x/tools/internal/imports"
 )
 
 var (

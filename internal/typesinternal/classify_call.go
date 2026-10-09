@@ -155,7 +155,7 @@ func UsedIdent(info *types.Info, e ast.Expr) *ast.Ident {
 	return nil
 }
 
-// See [golang.org/x/tools/go/types/typeutil.Callee].
+// See [github.com/greatliontech/go-x-tools/go/types/typeutil.Callee].
 func Callee(info *types.Info, call *ast.CallExpr) types.Object {
 	id := UsedIdent(info, call.Fun)
 	if id == nil {
@@ -174,7 +174,7 @@ func Callee(info *types.Info, call *ast.CallExpr) types.Object {
 	return obj
 }
 
-// See [golang.org/x/tools/go/types/typeutil.StaticCallee].
+// See [github.com/greatliontech/go-x-tools/go/types/typeutil.StaticCallee].
 func StaticCallee(info *types.Info, call *ast.CallExpr) *types.Func {
 	id := UsedIdent(info, call.Fun)
 	if id == nil {

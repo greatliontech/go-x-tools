@@ -19,11 +19,11 @@
 // All looping, branching and switching constructs are replaced with
 // unstructured control flow.  Higher-level control flow constructs
 // such as multi-way branch can be reconstructed as needed; see
-// [golang.org/x/tools/go/ssa/ssautil.Switches] for an example.
+// [github.com/greatliontech/go-x-tools/go/ssa/ssautil.Switches] for an example.
 //
 // The simplest way to create the SSA representation of a package is
-// to load typed syntax trees using [golang.org/x/tools/go/packages], then
-// invoke the [golang.org/x/tools/go/ssa/ssautil.Packages] helper function.
+// to load typed syntax trees using [github.com/greatliontech/go-x-tools/go/packages], then
+// invoke the [github.com/greatliontech/go-x-tools/go/ssa/ssautil.Packages] helper function.
 // (See the package-level Examples named LoadPackages and LoadWholeProgram.)
 // The resulting [ssa.Program] contains all the packages and their
 // members, but SSA code is not created for function bodies until a
@@ -111,7 +111,7 @@
 // either accurate or unambiguous.  The public API exposes a number of
 // name-based maps for client convenience.
 //
-// The [golang.org/x/tools/go/ssa/ssautil] package provides various
+// The [github.com/greatliontech/go-x-tools/go/ssa/ssautil] package provides various
 // helper functions, for example to simplify loading a Go program into
 // SSA form.
 //
@@ -119,4 +119,4 @@
 // of trying to determine corresponding elements across the four
 // domains of source locations, ast.Nodes, types.Objects,
 // ssa.Values/Instructions.
-package ssa // import "golang.org/x/tools/go/ssa"
+package ssa // import "github.com/greatliontech/go-x-tools/go/ssa"

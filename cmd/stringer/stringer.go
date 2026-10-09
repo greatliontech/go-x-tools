@@ -74,7 +74,7 @@
 // The -trimprefix flag specifies a prefix to remove from the constant names
 // when generating the string representations. For instance, -trimprefix=Pill
 // would be an alternative way to ensure that PillAspirin.String() == "Aspirin".
-package main // import "golang.org/x/tools/cmd/stringer"
+package main // import "github.com/greatliontech/go-x-tools/cmd/stringer"
 
 import (
 	"bytes"
@@ -91,7 +91,7 @@ import (
 	"sort"
 	"strings"
 
-	"golang.org/x/tools/go/packages"
+	"github.com/greatliontech/go-x-tools/go/packages"
 )
 
 var (

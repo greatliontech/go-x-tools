@@ -16,8 +16,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"golang.org/x/tools/internal/refactor"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/internal/refactor"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 func TestAddImport(t *testing.T) {
@@ -298,8 +298,8 @@ func _(io.Reader) {
 			src: `package a
 
 import (
-	"golang.org/x/tools/go/packages"
-	gossa "golang.org/x/tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	gossa "github.com/greatliontech/go-x-tools/go/ssa"
 )
 
 func _(io.Reader) {
@@ -310,8 +310,8 @@ func _(io.Reader) {
 import (
 	"fmt"
 
-	"golang.org/x/tools/go/packages"
-	gossa "golang.org/x/tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	gossa "github.com/greatliontech/go-x-tools/go/ssa"
 )
 
 func _(io.Reader) {

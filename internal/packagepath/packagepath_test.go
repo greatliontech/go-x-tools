@@ -7,7 +7,7 @@ package packagepath_test
 import (
 	"testing"
 
-	. "golang.org/x/tools/internal/packagepath"
+	. "github.com/greatliontech/go-x-tools/internal/packagepath"
 )
 
 func TestCanImport(t *testing.T) {

@@ -8,11 +8,11 @@ import (
 	"context"
 	"testing"
 
-	"golang.org/x/tools/internal/event"
-	"golang.org/x/tools/internal/event/core"
-	"golang.org/x/tools/internal/event/export/metric"
-	"golang.org/x/tools/internal/event/keys"
-	"golang.org/x/tools/internal/event/label"
+	"github.com/greatliontech/go-x-tools/internal/event"
+	"github.com/greatliontech/go-x-tools/internal/event/core"
+	"github.com/greatliontech/go-x-tools/internal/event/export/metric"
+	"github.com/greatliontech/go-x-tools/internal/event/keys"
+	"github.com/greatliontech/go-x-tools/internal/event/label"
 )
 
 // captureMetricData creates a metric using the production event system and returns the resulting data.

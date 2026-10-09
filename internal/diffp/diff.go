@@ -4,7 +4,7 @@
 
 // Package diffp implements a basic diff algorithm equivalent to patience diff.
 // It is a copy of internal/diff from the main Go repo, renamed to diffp to avoid
-// conflict with the existing golang.org/x/tools/internal/diff.
+// conflict with the existing github.com/greatliontech/go-x-tools/internal/diff.
 package diffp
 
 import (

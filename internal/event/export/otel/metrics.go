@@ -5,8 +5,8 @@
 package otel
 
 import (
-	"golang.org/x/tools/internal/event/export/metric"
-	"golang.org/x/tools/internal/event/label"
+	"github.com/greatliontech/go-x-tools/internal/event/export/metric"
+	"github.com/greatliontech/go-x-tools/internal/event/label"
 )
 
 // convertMetric converts internal metric.Data to an OTLP metric.
@@ -192,7 +192,7 @@ func (e *Exporter) exportMetrics(metrics []otlpMetric) error {
 		ResourceMetrics: []otlpResourceMetrics{{
 			Resource: e.resource,
 			ScopeMetrics: []otlpScopeMetrics{{
-				Scope:   otlpScope{Name: "golang.org/x/tools"},
+				Scope:   otlpScope{Name: "github.com/greatliontech/go-x-tools"},
 				Metrics: metrics,
 			}},
 		}},

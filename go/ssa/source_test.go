@@ -17,10 +17,10 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/ast/astutil"
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/internal/expect"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/go/ast/astutil"
+	"github.com/greatliontech/go-x-tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/internal/expect"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 func TestObjValueLookup(t *testing.T) {

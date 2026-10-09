@@ -15,7 +15,7 @@ import (
 	"os"
 	"sync"
 
-	"golang.org/x/tools/internal/versions"
+	"github.com/greatliontech/go-x-tools/internal/versions"
 )
 
 // NewProgram returns a new SSA Program.
@@ -312,7 +312,7 @@ func (prog *Program) ImportedPackage(path string) *Package {
 // after (e.g.) log.Fatal, improving the precision of analyses.
 //
 // A typical implementation is the [ctrlflow.CFGs.NoReturn] method from
-// [golang.org/x/tools/go/analysis/passes/ctrlflow].
+// [github.com/greatliontech/go-x-tools/go/analysis/passes/ctrlflow].
 func (prog *Program) SetNoReturn(noReturn func(*types.Func) bool) {
 	prog.noReturn = noReturn
 }

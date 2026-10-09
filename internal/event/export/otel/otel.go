@@ -32,11 +32,11 @@ import (
 	"sync"
 	"time"
 
-	"golang.org/x/tools/internal/event"
-	"golang.org/x/tools/internal/event/core"
-	"golang.org/x/tools/internal/event/export"
-	"golang.org/x/tools/internal/event/export/metric"
-	"golang.org/x/tools/internal/event/label"
+	"github.com/greatliontech/go-x-tools/internal/event"
+	"github.com/greatliontech/go-x-tools/internal/event/core"
+	"github.com/greatliontech/go-x-tools/internal/event/export"
+	"github.com/greatliontech/go-x-tools/internal/event/export/metric"
+	"github.com/greatliontech/go-x-tools/internal/event/label"
 )
 
 // Exporter exports spans and metrics to an OTLP HTTP endpoint.

@@ -13,12 +13,12 @@ import (
 	"testing"
 	"time"
 
-	jsonrpc2 "golang.org/x/tools/internal/jsonrpc2_v2"
+	jsonrpc2 "github.com/greatliontech/go-x-tools/internal/jsonrpc2_v2"
 )
 
 // needsLocalhostNet skips t if networking does not work for ports opened
 // with "localhost".
-// forked from golang.org/x/tools/internal/testenv.
+// forked from github.com/greatliontech/go-x-tools/internal/testenv.
 func needsLocalhostNet(t testing.TB) {
 	switch runtime.GOOS {
 	case "js", "wasip1":

@@ -52,7 +52,7 @@ import (
 	"io"
 	"os/exec"
 
-	"golang.org/x/tools/internal/gcimporter"
+	"github.com/greatliontech/go-x-tools/internal/gcimporter"
 )
 
 // Find returns the name of an object (.o) or archive (.a) file
@@ -65,7 +65,7 @@ import (
 // Find also returns the package's resolved (canonical) import path,
 // reflecting the effects of srcDir and vendoring on importPath.
 //
-// Deprecated: Use the higher-level API in golang.org/x/tools/go/packages,
+// Deprecated: Use the higher-level API in github.com/greatliontech/go-x-tools/go/packages,
 // which is more efficient.
 func Find(importPath, srcDir string) (filename, path string) {
 	cmd := exec.Command("go", "list", "-json", "-export", "--", importPath)

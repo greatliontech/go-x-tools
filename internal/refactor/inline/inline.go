@@ -19,15 +19,15 @@ import (
 	"slices"
 	"strings"
 
-	"golang.org/x/tools/go/ast/astutil"
-	"golang.org/x/tools/go/types/typeutil"
-	internalastutil "golang.org/x/tools/internal/astutil"
-	"golang.org/x/tools/internal/astutil/free"
-	"golang.org/x/tools/internal/packagepath"
-	"golang.org/x/tools/internal/refactor"
-	"golang.org/x/tools/internal/typeparams"
-	"golang.org/x/tools/internal/typesinternal"
-	"golang.org/x/tools/internal/versions"
+	"github.com/greatliontech/go-x-tools/go/ast/astutil"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	internalastutil "github.com/greatliontech/go-x-tools/internal/astutil"
+	"github.com/greatliontech/go-x-tools/internal/astutil/free"
+	"github.com/greatliontech/go-x-tools/internal/packagepath"
+	"github.com/greatliontech/go-x-tools/internal/refactor"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/internal/versions"
 )
 
 // A Caller describes the function call and its enclosing context.

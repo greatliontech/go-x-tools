@@ -9,7 +9,7 @@
 //
 // An object path is a unique identifier for an exported Go language symbol
 // (function, type, variable, etc) relative to its declaring package.
-// See [golang.org/x/tools/go/types/objectpath] for details.
+// See [github.com/greatliontech/go-x-tools/go/types/objectpath] for details.
 //
 // Usage: go run ./go/types/objectpath/main.go [packages...]
 package main
@@ -26,9 +26,9 @@ import (
 	"slices"
 	"strconv"
 
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/go/types/objectpath"
-	"golang.org/x/tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/go/types/objectpath"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 func main() {

@@ -8,10 +8,10 @@ import (
 	"go/ast"
 	"strings"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/internal/packagepath"
-	"golang.org/x/tools/internal/stdlib"
-	"golang.org/x/tools/internal/versions"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/internal/packagepath"
+	"github.com/greatliontech/go-x-tools/internal/stdlib"
+	"github.com/greatliontech/go-x-tools/internal/versions"
 )
 
 // FileUsesGoVersion reports whether the specified file may use features of the

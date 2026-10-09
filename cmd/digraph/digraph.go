@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package main // import "golang.org/x/tools/cmd/digraph"
+package main // import "github.com/greatliontech/go-x-tools/cmd/digraph"
 
 // TODO(adonovan):
 // - support input files other than stdin
@@ -28,8 +28,8 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"golang.org/x/tools/internal/graph"
-	"golang.org/x/tools/internal/graph/graphfmt"
+	"github.com/greatliontech/go-x-tools/internal/graph"
+	"github.com/greatliontech/go-x-tools/internal/graph/graphfmt"
 )
 
 func usage() {

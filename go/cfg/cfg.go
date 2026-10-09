@@ -38,7 +38,7 @@
 // The CFG does not record conditions associated with conditional branch
 // edges, nor the short-circuit semantics of the && and || operators,
 // nor abnormal control flow caused by panic.  If you need this
-// information, use golang.org/x/tools/go/ssa instead.
+// information, use github.com/greatliontech/go-x-tools/go/ssa instead.
 package cfg
 
 import (

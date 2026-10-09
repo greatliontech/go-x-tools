@@ -4,13 +4,13 @@
 
 //go:build ignore
 
-// The waitgroup command applies the golang.org/x/tools/go/analysis/passes/waitgroup
+// The waitgroup command applies the github.com/greatliontech/go-x-tools/go/analysis/passes/waitgroup
 // analysis to the specified packages of Go source code.
 package main
 
 import (
-	"golang.org/x/tools/go/analysis/passes/waitgroup"
-	"golang.org/x/tools/go/analysis/singlechecker"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/waitgroup"
+	"github.com/greatliontech/go-x-tools/go/analysis/singlechecker"
 )
 
 func main() { singlechecker.Main(waitgroup.Analyzer) }

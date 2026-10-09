@@ -8,8 +8,8 @@ package ssautil
 // We discourage their use.
 
 import (
-	"golang.org/x/tools/go/loader"
-	"golang.org/x/tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/loader"
+	"github.com/greatliontech/go-x-tools/go/ssa"
 )
 
 // CreateProgram returns a new program in SSA form, given a program
@@ -21,7 +21,7 @@ import (
 //
 // The mode parameter controls diagnostics and checking during SSA construction.
 //
-// Deprecated: Use [golang.org/x/tools/go/packages] and the [Packages]
+// Deprecated: Use [github.com/greatliontech/go-x-tools/go/packages] and the [Packages]
 // function instead; see ssa.Example_loadPackages.
 func CreateProgram(lprog *loader.Program, mode ssa.BuilderMode) *ssa.Program {
 	prog := ssa.NewProgram(lprog.Fset, mode)

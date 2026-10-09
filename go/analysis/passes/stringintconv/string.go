@@ -8,11 +8,11 @@ import (
 	_ "embed"
 	"go/ast"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/inspect"
-	"golang.org/x/tools/go/ast/inspector"
-	"golang.org/x/tools/internal/analysis/analyzerutil"
-	"golang.org/x/tools/internal/analysis/intconv"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/inspect"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/internal/analysis/analyzerutil"
+	"github.com/greatliontech/go-x-tools/internal/analysis/intconv"
 )
 
 //go:embed doc.go
@@ -21,7 +21,7 @@ var doc string
 var Analyzer = &analysis.Analyzer{
 	Name:     "stringintconv",
 	Doc:      analyzerutil.MustExtractDoc(doc, "stringintconv"),
-	URL:      "https://pkg.go.dev/golang.org/x/tools/go/analysis/passes/stringintconv",
+	URL:      "https://pkg.go.dev/github.com/greatliontech/go-x-tools/go/analysis/passes/stringintconv",
 	Requires: []*analysis.Analyzer{inspect.Analyzer},
 	Run:      run,
 }

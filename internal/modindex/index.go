@@ -142,7 +142,7 @@ var parseCount atomic.Int64
 //
 // The result is memoized: parsing the payload file, which may be
 // hundreds of megabytes, is far more expensive than the rest of the
-// work done by a typical client such as [golang.org/x/tools/imports.Process],
+// work done by a typical client such as [github.com/greatliontech/go-x-tools/imports.Process],
 // and clients that process many files would otherwise repeat it for
 // each one. Because payload files are immutable--[write] gives each
 // one a fresh random name and only then updates the link file to refer

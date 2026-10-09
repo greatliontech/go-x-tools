@@ -7,7 +7,7 @@ package astutil
 import (
 	"go/ast"
 
-	"golang.org/x/tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
 )
 
 // UnpackRecv unpacks a receiver type expression, reporting whether it is a

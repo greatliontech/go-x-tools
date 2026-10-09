@@ -1,0 +1,24 @@
+name: Fork checks
+
+on:
+  push:
+    branches: [main, glt-v0.50]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.27.1', '1.27.2']
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+      - run: go test -p 4 -count=1 -timeout=20m ./...

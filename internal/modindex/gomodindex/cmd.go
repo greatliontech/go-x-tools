@@ -22,7 +22,7 @@ import (
 	"strings"
 	"time"
 
-	"golang.org/x/tools/internal/modindex"
+	"github.com/greatliontech/go-x-tools/internal/modindex"
 )
 
 var verbose = flag.Int("v", 0, "how much information to print")

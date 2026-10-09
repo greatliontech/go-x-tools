@@ -7,8 +7,8 @@ package astutil
 import (
 	"go/ast"
 
-	"golang.org/x/tools/go/ast/edge"
-	"golang.org/x/tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/go/ast/edge"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
 )
 
 // UnparenCursor returns the cursor for an expression with any

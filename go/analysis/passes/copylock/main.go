@@ -4,13 +4,13 @@
 
 //go:build ignore
 
-// The copylock command applies the golang.org/x/tools/go/analysis/passes/copylock
+// The copylock command applies the github.com/greatliontech/go-x-tools/go/analysis/passes/copylock
 // analysis to the specified packages of Go source code.
 package main
 
 import (
-	"golang.org/x/tools/go/analysis/passes/copylock"
-	"golang.org/x/tools/go/analysis/singlechecker"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/copylock"
+	"github.com/greatliontech/go-x-tools/go/analysis/singlechecker"
 )
 
 func main() { singlechecker.Main(copylock.Analyzer) }

@@ -9,9 +9,9 @@ import (
 	"go/parser"
 	"strings"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/internal/analysis/analyzerutil"
-	"golang.org/x/tools/internal/versions"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/internal/analysis/analyzerutil"
+	"github.com/greatliontech/go-x-tools/internal/versions"
 )
 
 var PlusBuildAnalyzer = &analysis.Analyzer{

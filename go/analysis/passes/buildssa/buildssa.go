@@ -14,9 +14,9 @@ import (
 	"iter"
 	"reflect"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/ctrlflow"
-	"golang.org/x/tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/ctrlflow"
+	"github.com/greatliontech/go-x-tools/go/ssa"
 )
 
 var Analyzer = &analysis.Analyzer{

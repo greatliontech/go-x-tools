@@ -1,4 +1,4 @@
-module golang.org/x/tools
+module github.com/greatliontech/go-x-tools
 
 go 1.26.0
 

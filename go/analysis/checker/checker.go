@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package checker provides an analysis driver based on the
-// [golang.org/x/tools/go/packages] representation of a set of
+// [github.com/greatliontech/go-x-tools/go/packages] representation of a set of
 // packages and all their dependencies, as produced by
 // [packages.Load].
 //
@@ -43,10 +43,10 @@ import (
 	"sync"
 	"time"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/internal"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/internal/analysis/driverutil"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/internal"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/internal/analysis/driverutil"
 )
 
 // Options specifies options that control the analysis driver.

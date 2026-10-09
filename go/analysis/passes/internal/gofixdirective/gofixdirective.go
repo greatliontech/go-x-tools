@@ -18,9 +18,9 @@ import (
 	"go/token"
 	"go/types"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/ast/inspector"
-	internalastutil "golang.org/x/tools/internal/astutil"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	internalastutil "github.com/greatliontech/go-x-tools/internal/astutil"
 )
 
 // A Handler handles language entities with go:fix directives.

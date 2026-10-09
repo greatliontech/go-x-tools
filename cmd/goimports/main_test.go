@@ -10,9 +10,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"golang.org/x/tools/internal/modindex"
-	"golang.org/x/tools/internal/testenv"
-	"golang.org/x/tools/txtar"
+	"github.com/greatliontech/go-x-tools/internal/modindex"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/txtar"
 )
 
 const cache = `

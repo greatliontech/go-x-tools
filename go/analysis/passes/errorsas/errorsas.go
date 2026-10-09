@@ -11,9 +11,9 @@ import (
 	"go/ast"
 	"go/types"
 
-	"golang.org/x/tools/go/analysis"
-	typeindexanalyzer "golang.org/x/tools/internal/analysis/typeindex"
-	"golang.org/x/tools/internal/typesinternal/typeindex"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	typeindexanalyzer "github.com/greatliontech/go-x-tools/internal/analysis/typeindex"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal/typeindex"
 )
 
 const Doc = `report passing non-pointer or non-error values to errors.As
