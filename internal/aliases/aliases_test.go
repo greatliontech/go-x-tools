@@ -11,8 +11,8 @@ import (
 	"go/types"
 	"testing"
 
-	"golang.org/x/tools/internal/aliases"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/internal/aliases"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 // TestNew tests that [aliases.New] creates a *types.Alias of a type

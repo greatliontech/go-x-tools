@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package rename contains the obsolete implementation of the deleted
-// golang.org/x/tools/cmd/gorename. This logic has not worked properly
+// github.com/greatliontech/go-x-tools/cmd/gorename. This logic has not worked properly
 // since the advent of Go modules, and should be deleted too.
 //
 // Use gopls instead, either via the Rename LSP method or the "gopls
@@ -30,10 +30,10 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/tools/go/loader"
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/refactor/importgraph"
-	"golang.org/x/tools/refactor/satisfy"
+	"github.com/greatliontech/go-x-tools/go/loader"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/refactor/importgraph"
+	"github.com/greatliontech/go-x-tools/refactor/satisfy"
 )
 
 const Usage = `gorename: precise type-safe renaming of identifiers in Go source code.

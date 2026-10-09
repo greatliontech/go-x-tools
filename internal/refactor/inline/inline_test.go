@@ -22,17 +22,17 @@ import (
 	"testing"
 	"unsafe"
 
-	"golang.org/x/tools/go/ast/astutil"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/analysis/driverutil"
-	"golang.org/x/tools/internal/diff"
-	"golang.org/x/tools/internal/expect"
-	"golang.org/x/tools/internal/refactor"
-	"golang.org/x/tools/internal/refactor/inline"
-	"golang.org/x/tools/internal/testenv"
-	"golang.org/x/tools/internal/testfiles"
-	"golang.org/x/tools/txtar"
+	"github.com/greatliontech/go-x-tools/go/ast/astutil"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/analysis/driverutil"
+	"github.com/greatliontech/go-x-tools/internal/diff"
+	"github.com/greatliontech/go-x-tools/internal/expect"
+	"github.com/greatliontech/go-x-tools/internal/refactor"
+	"github.com/greatliontech/go-x-tools/internal/refactor/inline"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/internal/testfiles"
+	"github.com/greatliontech/go-x-tools/txtar"
 )
 
 // TestData executes test scenarios specified by files in testdata/*.txtar.

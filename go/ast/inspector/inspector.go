@@ -47,7 +47,7 @@ package inspector
 import (
 	"go/ast"
 
-	"golang.org/x/tools/go/ast/edge"
+	"github.com/greatliontech/go-x-tools/go/ast/edge"
 )
 
 // An Inspector provides methods for inspecting

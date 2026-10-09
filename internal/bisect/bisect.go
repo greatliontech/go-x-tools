@@ -4,7 +4,7 @@
 
 // Package bisect can be used by compilers and other programs
 // to serve as a target for the bisect debugging tool.
-// See [golang.org/x/tools/cmd/bisect] for details about using the tool.
+// See [github.com/greatliontech/go-x-tools/cmd/bisect] for details about using the tool.
 //
 // To be a bisect target, allowing bisect to help determine which of a set of independent
 // changes provokes a failure, a program needs to:

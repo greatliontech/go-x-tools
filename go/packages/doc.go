@@ -76,7 +76,7 @@ uninterpreted to Load, so that it can interpret them
 according to the conventions of the underlying build system.
 
 See the Example function for typical usage.
-See also [golang.org/x/tools/go/packages/internal/linecount]
+See also [github.com/greatliontech/go-x-tools/go/packages/internal/linecount]
 for an example application.
 
 # The driver protocol
@@ -109,7 +109,7 @@ that is a descendant of this directory, it must use an absolute path
 that has the value of PWD as a prefix, to ensure that the returned
 filenames satisfy the original query.
 */
-package packages // import "golang.org/x/tools/go/packages"
+package packages // import "github.com/greatliontech/go-x-tools/go/packages"
 
 /*
 
@@ -117,7 +117,7 @@ Motivation and design considerations
 
 The new package's design solves problems addressed by two existing
 packages: go/build, which locates and describes packages, and
-golang.org/x/tools/go/loader, which loads, parses and type-checks them.
+github.com/greatliontech/go-x-tools/go/loader, which loads, parses and type-checks them.
 The go/build.Package structure encodes too much of the 'go build' way
 of organizing projects, leaving us in need of a data type that describes a
 package of Go source code independent of the underlying build system.

@@ -28,13 +28,13 @@ import (
 	"testing/fstest"
 
 	"github.com/google/go-cmp/cmp"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/internal/packagepath"
-	"golang.org/x/tools/internal/packagesinternal"
-	"golang.org/x/tools/internal/packagestest"
-	"golang.org/x/tools/internal/testenv"
-	"golang.org/x/tools/internal/testfiles"
-	"golang.org/x/tools/txtar"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/internal/packagepath"
+	"github.com/greatliontech/go-x-tools/internal/packagesinternal"
+	"github.com/greatliontech/go-x-tools/internal/packagestest"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/internal/testfiles"
+	"github.com/greatliontech/go-x-tools/txtar"
 )
 
 func TestMain(m *testing.M) {

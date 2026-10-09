@@ -119,7 +119,7 @@ func Directives(g *ast.CommentGroup) (res []*Directive) {
 				}
 				name, args, _ := strings.Cut(nameargs, " ") // tab??
 				// Permit an additional line comment after the args, chiefly to support
-				// [golang.org/x/tools/go/analysis/analysistest].
+				// [github.com/greatliontech/go-x-tools/go/analysis/analysistest].
 				args, _, _ = strings.Cut(args, "//")
 				res = append(res, &Directive{
 					Pos:  c.Slash,

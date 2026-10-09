@@ -22,7 +22,7 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/tools/internal/fmtstr"
+	"github.com/greatliontech/go-x-tools/internal/fmtstr"
 )
 
 func main() {

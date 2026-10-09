@@ -12,7 +12,7 @@ import (
 	"go/token"
 	"go/types"
 
-	"golang.org/x/tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
 )
 
 // emitAlloc emits to f a new Alloc instruction allocating a variable

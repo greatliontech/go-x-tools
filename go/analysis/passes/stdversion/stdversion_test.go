@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"golang.org/x/tools/go/analysis/analysistest"
-	"golang.org/x/tools/go/analysis/passes/stdversion"
-	"golang.org/x/tools/internal/testfiles"
+	"github.com/greatliontech/go-x-tools/go/analysis/analysistest"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/stdversion"
+	"github.com/greatliontech/go-x-tools/internal/testfiles"
 )
 
 func Test(t *testing.T) {

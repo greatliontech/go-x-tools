@@ -12,7 +12,7 @@ import (
 	"reflect"
 	"testing"
 
-	jsonrpc2 "golang.org/x/tools/internal/jsonrpc2_v2"
+	jsonrpc2 "github.com/greatliontech/go-x-tools/internal/jsonrpc2_v2"
 )
 
 var callTests = []invoker{

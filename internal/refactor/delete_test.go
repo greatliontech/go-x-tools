@@ -15,9 +15,9 @@ import (
 	"slices"
 	"testing"
 
-	"golang.org/x/tools/go/ast/inspector"
-	"golang.org/x/tools/internal/diff"
-	"golang.org/x/tools/internal/refactor"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/internal/diff"
+	"github.com/greatliontech/go-x-tools/internal/refactor"
 )
 
 func TestDeleteStmt(t *testing.T) {

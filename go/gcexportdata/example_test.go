@@ -18,7 +18,7 @@ import (
 	"slices"
 	"strings"
 
-	"golang.org/x/tools/go/gcexportdata"
+	"github.com/greatliontech/go-x-tools/go/gcexportdata"
 )
 
 // ExampleRead uses gcexportdata.Read to load type information for the

@@ -80,8 +80,8 @@ why the gopls application depends on the cmp package:
 
 Show which packages in x/tools depend, perhaps indirectly, on the callgraph package:
 
-	$ go list -f '{{.ImportPath}} {{join .Imports " "}}' -deps golang.org/x/tools/... |
-		digraph reverse golang.org/x/tools/go/callgraph
+	$ go list -f '{{.ImportPath}} {{join .Imports " "}}' -deps github.com/greatliontech/go-x-tools/... |
+		digraph reverse github.com/greatliontech/go-x-tools/go/callgraph
 
 Visualize the package dependency graph of the current package:
 

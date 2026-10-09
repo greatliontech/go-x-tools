@@ -241,7 +241,7 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/tools/go/types/objectpath"
+	"github.com/greatliontech/go-x-tools/go/types/objectpath"
 )
 
 // IExportShallow encodes "shallow" export data for the specified package.

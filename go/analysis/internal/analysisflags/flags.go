@@ -18,7 +18,7 @@ import (
 	"os"
 	"strconv"
 
-	"golang.org/x/tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis"
 )
 
 // flags common to all {single,multi,unit}checkers.

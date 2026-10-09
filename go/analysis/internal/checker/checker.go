@@ -27,12 +27,12 @@ import (
 	"strings"
 	"time"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/checker"
-	"golang.org/x/tools/go/analysis/internal"
-	"golang.org/x/tools/go/analysis/internal/analysisflags"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/internal/analysis/driverutil"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/checker"
+	"github.com/greatliontech/go-x-tools/go/analysis/internal"
+	"github.com/greatliontech/go-x-tools/go/analysis/internal/analysisflags"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/internal/analysis/driverutil"
 )
 
 var (

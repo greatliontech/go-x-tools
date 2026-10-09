@@ -7,8 +7,8 @@
 package main
 
 import (
-	"golang.org/x/tools/go/analysis/passes/sqlrowserr"
-	"golang.org/x/tools/go/analysis/singlechecker"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/sqlrowserr"
+	"github.com/greatliontech/go-x-tools/go/analysis/singlechecker"
 )
 
 func main() { singlechecker.Main(sqlrowserr.Analyzer) }

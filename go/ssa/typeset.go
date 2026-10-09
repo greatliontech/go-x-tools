@@ -7,7 +7,7 @@ package ssa
 import (
 	"go/types"
 
-	"golang.org/x/tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
 )
 
 // Utilities for dealing with type sets.

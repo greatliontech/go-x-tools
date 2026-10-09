@@ -14,12 +14,12 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/go/ssa/ssautil"
-	"golang.org/x/tools/internal/testfiles"
-	"golang.org/x/tools/txtar"
+	"github.com/greatliontech/go-x-tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/ssa/ssautil"
+	"github.com/greatliontech/go-x-tools/internal/testfiles"
+	"github.com/greatliontech/go-x-tools/txtar"
 
-	"golang.org/x/tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
 )
 
 // val is a test data structure for creating ssa.Value

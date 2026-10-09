@@ -76,10 +76,10 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/internal/astutil"
-	"golang.org/x/tools/internal/expect"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/internal/astutil"
+	"github.com/greatliontech/go-x-tools/internal/expect"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 var (

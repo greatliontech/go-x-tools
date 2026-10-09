@@ -8,7 +8,7 @@
 //
 // Example usage:
 //
-//	$ nodecount golang.org/x/tools/... std
+//	$ nodecount github.com/greatliontech/go-x-tools/... std
 //
 // A typical distribution is 40% identifiers, 10% literals, 8%
 // selectors, and 6% calls; around 3% each of BinaryExpr, BlockStmt,
@@ -23,7 +23,7 @@ import (
 	"reflect"
 	"sort"
 
-	"golang.org/x/tools/go/packages"
+	"github.com/greatliontech/go-x-tools/go/packages"
 )
 
 func main() {

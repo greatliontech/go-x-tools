@@ -12,13 +12,13 @@ import (
 	"go/token"
 	"go/types"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/inspect"
-	"golang.org/x/tools/go/ast/edge"
-	"golang.org/x/tools/go/ast/inspector"
-	typeindexanalyzer "golang.org/x/tools/internal/analysis/typeindex"
-	"golang.org/x/tools/internal/moreiters"
-	"golang.org/x/tools/internal/typesinternal/typeindex"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/inspect"
+	"github.com/greatliontech/go-x-tools/go/ast/edge"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	typeindexanalyzer "github.com/greatliontech/go-x-tools/internal/analysis/typeindex"
+	"github.com/greatliontech/go-x-tools/internal/moreiters"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal/typeindex"
 )
 
 const doc = `sqlrowserr: report failure to check sql.Rows.Err

@@ -32,7 +32,7 @@ import (
 	"strings"
 	"sync"
 
-	"golang.org/x/tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 // TODO(adonovan): think about generic aliases.

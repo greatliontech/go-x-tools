@@ -13,11 +13,11 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/unreachable"
-	"golang.org/x/tools/go/analysis/passes/unsafeptr"
-	"golang.org/x/tools/go/analysis/suite/vet"
-	"golang.org/x/tools/go/analysis/unitchecker"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/unreachable"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/unsafeptr"
+	"github.com/greatliontech/go-x-tools/go/analysis/suite/vet"
+	"github.com/greatliontech/go-x-tools/go/analysis/unitchecker"
 )
 
 // vetmain is the entrypoint of this executable when ENTRYPOINT=vet.

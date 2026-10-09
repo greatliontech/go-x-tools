@@ -10,16 +10,16 @@ import (
 	"go/ast"
 	"go/types"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/inspect"
-	"golang.org/x/tools/go/ast/edge"
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/analysis/analyzerutil"
-	typeindexanalyzer "golang.org/x/tools/internal/analysis/typeindex"
-	"golang.org/x/tools/internal/astutil"
-	"golang.org/x/tools/internal/typesinternal"
-	"golang.org/x/tools/internal/typesinternal/typeindex"
-	"golang.org/x/tools/internal/versions"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/inspect"
+	"github.com/greatliontech/go-x-tools/go/ast/edge"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/analysis/analyzerutil"
+	typeindexanalyzer "github.com/greatliontech/go-x-tools/internal/analysis/typeindex"
+	"github.com/greatliontech/go-x-tools/internal/astutil"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal/typeindex"
+	"github.com/greatliontech/go-x-tools/internal/versions"
 )
 
 var ReflectTypeForAnalyzer = &analysis.Analyzer{

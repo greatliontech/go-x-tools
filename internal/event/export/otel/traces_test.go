@@ -13,10 +13,10 @@ import (
 	"sync"
 	"testing"
 
-	"golang.org/x/tools/internal/event"
-	"golang.org/x/tools/internal/event/core"
-	"golang.org/x/tools/internal/event/export"
-	"golang.org/x/tools/internal/event/label"
+	"github.com/greatliontech/go-x-tools/internal/event"
+	"github.com/greatliontech/go-x-tools/internal/event/core"
+	"github.com/greatliontech/go-x-tools/internal/event/export"
+	"github.com/greatliontech/go-x-tools/internal/event/label"
 )
 
 func TestConvertSpan(t *testing.T) {

@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	. "golang.org/x/tools/go/analysis/analysistest"
-	"golang.org/x/tools/go/analysis/passes/modernize"
-	"golang.org/x/tools/internal/testenv"
+	. "github.com/greatliontech/go-x-tools/go/analysis/analysistest"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/modernize"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 func TestAppendClipped(t *testing.T) {

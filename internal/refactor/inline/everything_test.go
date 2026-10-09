@@ -17,11 +17,11 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/diff"
-	"golang.org/x/tools/internal/refactor/inline"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/diff"
+	"github.com/greatliontech/go-x-tools/internal/refactor/inline"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 var packagesFlag = flag.String("packages", "", "set of packages for TestEverything")
@@ -33,7 +33,7 @@ var packagesFlag = flag.String("packages", "", "set of packages for TestEverythi
 // It does nothing during ordinary testing, but may be used to find
 // inlining bugs in large corpora.
 //
-// Use this command to inline everything in golang.org/x/tools:
+// Use this command to inline everything in github.com/greatliontech/go-x-tools:
 //
 // $ go test ./internal/refactor/inline/ -run=Everything -packages=../../../
 //

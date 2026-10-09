@@ -10,13 +10,13 @@ import (
 	"sort"
 	"testing"
 
-	"golang.org/x/tools/go/callgraph"
-	"golang.org/x/tools/go/callgraph/static"
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/go/ssa/ssautil"
-	"golang.org/x/tools/internal/testenv"
-	"golang.org/x/tools/internal/testfiles"
-	"golang.org/x/tools/txtar"
+	"github.com/greatliontech/go-x-tools/go/callgraph"
+	"github.com/greatliontech/go-x-tools/go/callgraph/static"
+	"github.com/greatliontech/go-x-tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/ssa/ssautil"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/internal/testfiles"
+	"github.com/greatliontech/go-x-tools/txtar"
 )
 
 const input = `

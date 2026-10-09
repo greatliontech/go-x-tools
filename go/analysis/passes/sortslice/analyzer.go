@@ -13,11 +13,11 @@ import (
 	"go/format"
 	"go/types"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/inspect"
-	"golang.org/x/tools/go/ast/inspector"
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/inspect"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 const Doc = `check the argument type of sort.Slice

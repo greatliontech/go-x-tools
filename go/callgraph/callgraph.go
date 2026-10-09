@@ -30,7 +30,7 @@ Calls to built-in functions (e.g. panic, println) are not represented
 in the call graph; they are treated like built-in operators of the
 language.
 */
-package callgraph // import "golang.org/x/tools/go/callgraph"
+package callgraph // import "github.com/greatliontech/go-x-tools/go/callgraph"
 
 // TODO(zpavlinovic): decide how callgraphs handle calls to and from generic function bodies.
 
@@ -38,7 +38,7 @@ import (
 	"fmt"
 	"go/token"
 
-	"golang.org/x/tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/ssa"
 )
 
 // A Graph represents a call graph.

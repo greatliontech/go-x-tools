@@ -15,9 +15,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/greatliontech/go-x-tools/internal/gocommand"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/tools/internal/gocommand"
-	"golang.org/x/tools/internal/testenv"
 )
 
 func TestGoVersion(t *testing.T) {

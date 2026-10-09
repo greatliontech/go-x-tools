@@ -9,7 +9,7 @@ import (
 	"log"
 	"slices"
 
-	"golang.org/x/tools/internal/graph"
+	"github.com/greatliontech/go-x-tools/internal/graph"
 )
 
 // Forward performs a forward monotone analysis over a control flow graph.

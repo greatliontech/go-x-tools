@@ -8,7 +8,7 @@ import (
 	"go/ast"
 	"testing"
 
-	"golang.org/x/tools/go/ast/edge"
+	"github.com/greatliontech/go-x-tools/go/ast/edge"
 )
 
 func TestGetNilConcrete(t *testing.T) {

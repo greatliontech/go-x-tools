@@ -46,12 +46,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/internal/analysisflags"
+	"github.com/greatliontech/go-x-tools/internal/analysis/driverutil"
+	"github.com/greatliontech/go-x-tools/internal/facts"
+	"github.com/greatliontech/go-x-tools/internal/gcimporter"
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/internal/analysisflags"
-	"golang.org/x/tools/internal/analysis/driverutil"
-	"golang.org/x/tools/internal/facts"
-	"golang.org/x/tools/internal/gcimporter"
 )
 
 // A Config describes a compilation unit to be analyzed.

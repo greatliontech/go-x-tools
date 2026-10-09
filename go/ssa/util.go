@@ -16,9 +16,9 @@ import (
 	"sync"
 	_ "unsafe" // for go:linkname hack
 
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/typeparams"
-	"golang.org/x/tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 type unit struct{}
@@ -403,5 +403,5 @@ func (canon *canonizer) instantiateMethod(m *types.Func, targs []types.Type, ctx
 
 // Exposed to ssautil using the linkname hack.
 //
-//go:linkname isSyntactic golang.org/x/tools/go/ssa.isSyntactic
+//go:linkname isSyntactic github.com/greatliontech/go-x-tools/go/ssa.isSyntactic
 func isSyntactic(pkg *Package) bool { return pkg.syntax }

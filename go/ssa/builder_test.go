@@ -23,14 +23,14 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/greatliontech/go-x-tools/go/analysis/analysistest"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/ssa/ssautil"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/expect"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 	"golang.org/x/sync/errgroup"
-	"golang.org/x/tools/go/analysis/analysistest"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/go/ssa/ssautil"
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/expect"
-	"golang.org/x/tools/internal/testenv"
 )
 
 func isEmpty(f *ssa.Function) bool { return f.Blocks == nil }

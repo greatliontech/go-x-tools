@@ -47,8 +47,8 @@ import (
 	"go/types"
 	"iter"
 
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
 )
 
 // A Constraint records the fact that the RHS type does and must
@@ -765,7 +765,7 @@ func (f *Finder) stmt(s ast.Stmt) {
 	}
 }
 
-// -- Plundered from golang.org/x/tools/go/ssa -----------------
+// -- Plundered from github.com/greatliontech/go-x-tools/go/ssa -----------------
 
 func instance(info *types.Info, expr ast.Expr) bool {
 	var id *ast.Ident

@@ -10,7 +10,7 @@ import (
 	"slices"
 	"testing"
 
-	"golang.org/x/tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
 )
 
 // TestPreorderSeq checks PreorderSeq against Preorder.

@@ -7,7 +7,7 @@ package flow_test
 import (
 	"testing"
 
-	"golang.org/x/tools/internal/flow"
+	"github.com/greatliontech/go-x-tools/internal/flow"
 )
 
 type nodeSet uint64

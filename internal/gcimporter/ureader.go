@@ -13,9 +13,9 @@ import (
 	"sort"
 	"strings"
 
-	"golang.org/x/tools/internal/aliases"
-	"golang.org/x/tools/internal/pkgbits"
-	"golang.org/x/tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/internal/aliases"
+	"github.com/greatliontech/go-x-tools/internal/pkgbits"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 // A pkgReader holds the shared state for reading a unified IR package

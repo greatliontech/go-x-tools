@@ -32,7 +32,7 @@ import (
 	"sort"
 	"strings"
 
-	"golang.org/x/tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis"
 )
 
 var Analyzer = &analysis.Analyzer{

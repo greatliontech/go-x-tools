@@ -10,8 +10,8 @@ import (
 	"fmt"
 	"go/types"
 
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 // MethodValue returns the Function implementing method sel, building

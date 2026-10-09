@@ -13,7 +13,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"golang.org/x/tools/internal/stdlib"
+	"github.com/greatliontech/go-x-tools/internal/stdlib"
 )
 
 func TestImports(t *testing.T) { testDepsFunc(t, "testdata/nethttp.imports", stdlib.Imports) }
@@ -37,11 +37,11 @@ func testDepsFunc(t *testing.T, filename string, depsFunc func(pkgs ...string) i
 
 func TestIsBootstrapPackage(t *testing.T) {
 	for pkg, want := range map[string]bool{
-		"cmd/internal/obj/arm64":             true,
-		"sort":                               true,
-		"encoding/json":                      false,
-		"golang.org/x/tools/internal/stdlib": false,
-		"":                                   false,
+		"cmd/internal/obj/arm64": true,
+		"sort":                   true,
+		"encoding/json":          false,
+		"github.com/greatliontech/go-x-tools/internal/stdlib": false,
+		"": false,
 	} {
 		got := stdlib.IsBootstrapPackage(pkg)
 		if got != want {
