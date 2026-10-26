@@ -21,9 +21,9 @@ import (
 // normal form.
 type termlist []*term
 
-// allTermlist represents the set of all types.
+// allTermlist returns a termlist representing the set of all types.
 // It is in normal form.
-var allTermlist = termlist{new(term)}
+func allTermlist() termlist { return termlist{new(term)} }
 
 // termSep is the separator used between individual terms.
 const termSep = " | "
@@ -92,7 +92,7 @@ func (xl termlist) norm() termlist {
 				// and other terms and the result would not be
 				// in normal form.)
 				if u1.typ == nil {
-					return allTermlist
+					return allTermlist()
 				}
 				xi = u1
 				used[j] = true // xj is now unioned into xi - ignore it in future iterations

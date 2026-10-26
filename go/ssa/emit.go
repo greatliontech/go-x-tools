@@ -152,7 +152,7 @@ func emitCompare(f *Function, op token.Token, x, y Value, pos token.Pos) Value {
 	//   if e==true { ... }
 	// even in the case when e's type is an interface.
 	// TODO(adonovan): opt: generalise to x==true, false!=y, etc.
-	if x == vTrue && op == token.EQL {
+	if isTrueConst(x) && op == token.EQL {
 		if yt, ok := yt.(*types.Basic); ok && yt.Info()&types.IsBoolean != 0 {
 			return y
 		}
@@ -470,7 +470,7 @@ func emitTypeTest(f *Function, x Value, t types.Type, pos token.Pos) Value {
 	a.setPos(pos)
 	a.setType(types.NewTuple(
 		newVar("value", t),
-		varOk,
+		varOk(),
 	))
 	return f.emit(a)
 }
@@ -521,7 +521,7 @@ func emitCall(fn *Function, call *Call) Value {
 		fn.Prog.noReturn(callee.object) {
 		// Call cannot return. Insert a panic after it.
 		fn.emit(&Panic{
-			X:   emitConv(fn, vNoReturn, tEface),
+			X:   emitConv(fn, vNoReturn(), tEface()),
 			pos: call.Pos(),
 		})
 		fn.currentBlock = fn.newBasicBlock("unreachable.noreturn")

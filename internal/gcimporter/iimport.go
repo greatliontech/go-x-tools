@@ -546,13 +546,8 @@ type importReader struct {
 	prevColumn int64
 }
 
-// markBlack is redefined in iimport_go123.go, to work around golang/go#69912.
-//
-// If TypeNames are not marked black (in the sense of go/types cycle
-// detection), they may be mutated when dot-imported. Fix this by punching a
-// hole through the type, when compiling with Go 1.23. (The bug has been fixed
-// for 1.24, but the fix was not worth back-porting).
-var markBlack = func(name *types.TypeName) {}
+// markBlack is a no-op on Go 1.24+.
+func markBlack(name *types.TypeName) {}
 
 // obj decodes and declares the package-level object denoted by (pkg, name).
 func (r *importReader) obj(pkg *types.Package, name string) {

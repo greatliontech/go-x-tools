@@ -13,7 +13,6 @@ import (
 	"go/token"
 	"go/types"
 	"os"
-	"sync"
 
 	"github.com/greatliontech/go-x-tools/internal/versions"
 )
@@ -33,13 +32,16 @@ import (
 //
 // See the Example tests for simple examples.
 func NewProgram(fset *token.FileSet, mode BuilderMode) *Program {
+	ssaPkg := types.NewPackage("$ssa", "ssa")
 	return &Program{
-		Fset:     fset,
-		imported: make(map[string]*Package),
-		packages: make(map[*types.Package]*Package),
-		mode:     mode,
-		canon:    newCanonizer(),
-		ctxt:     types.NewContext(),
+		Fset:           fset,
+		imported:       make(map[string]*Package),
+		packages:       make(map[*types.Package]*Package),
+		mode:           mode,
+		canon:          newCanonizer(),
+		ctxt:           types.NewContext(),
+		rangeIterType:  ssaNamedType(ssaPkg, "rangeIter", tUnsafePointer),
+		deferStackType: ssaNamedType(ssaPkg, "deferStack", tUnsafePointer),
 	}
 }
 
@@ -259,9 +261,9 @@ func (prog *Program) CreatePackage(pkg *types.Package, files []*ast.File, info *
 	}
 
 	if prog.mode&PrintPackages != 0 {
-		printMu.Lock()
+		prog.printMu.Lock()
 		p.WriteTo(os.Stdout)
-		printMu.Unlock()
+		prog.printMu.Unlock()
 	}
 
 	if importable {
@@ -271,9 +273,6 @@ func (prog *Program) CreatePackage(pkg *types.Package, files []*ast.File, info *
 
 	return p
 }
-
-// printMu serializes printing of Packages/Functions to stdout.
-var printMu sync.Mutex
 
 // AllPackages returns a new slice containing all packages created by
 // prog.CreatePackage in unspecified order.

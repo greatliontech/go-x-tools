@@ -537,9 +537,6 @@ type Package struct {
 	// ForTest is the package under test, if any.
 	ForTest string
 
-	// depsErrors is the DepsErrors field from the go list response, if any.
-	depsErrors []*packagesinternal.PackageError
-
 	// exportDataError is the error encountered reading export data, if any.
 	// Decoding export data should ordinarily be infallible, so this typically
 	// indicates a producer/consumer version skew.
@@ -568,13 +565,10 @@ type ModuleError struct {
 	Err string // the error itself
 }
 
-func init() {
-	packagesinternal.GetDepsErrors = func(p any) []*packagesinternal.PackageError {
-		return p.(*Package).depsErrors
-	}
-	packagesinternal.TypecheckCgo = int(typecheckCgo)
-	packagesinternal.DepsErrors = int(needInternalDepsErrors)
-}
+var (
+	_ = [1]struct{}{}[int(needInternalDepsErrors)-packagesinternal.DepsErrors]
+	_ = [1]struct{}{}[int(typecheckCgo)-packagesinternal.TypecheckCgo]
+)
 
 // An Error describes a problem with a package's metadata, syntax, or types.
 type Error struct {
@@ -708,6 +702,8 @@ type loader struct {
 	parseCacheMu   sync.Mutex
 	exportMu       sync.Mutex // enforces mutual exclusion of exportdata operations
 	externalDriver bool       // true if an external GOPACKAGESDRIVER handled the request
+	ioLimit        chan unit
+	cpuLimit       chan unit
 
 	// Config.Mode contains the implied mode (see impliedLoadMode).
 	// Implied mode contains all the fields we need the data for.
@@ -727,6 +723,8 @@ type parseValue struct {
 func newLoader(cfg *Config) *loader {
 	ld := &loader{
 		parseCache: map[string]*parseValue{},
+		ioLimit:    make(chan unit, 20),
+		cpuLimit:   make(chan unit, runtime.GOMAXPROCS(0)),
 	}
 	if cfg != nil {
 		ld.Config = *cfg
@@ -1186,20 +1184,24 @@ func (ld *loader) loadPackage(lpkg *loaderPackage) {
 		return // can't get syntax trees for this package
 	}
 
+	if ld.Context.Err() != nil {
+		return
+	}
+
 	files, errs := ld.parseFiles(lpkg.CompiledGoFiles)
+	// Start shutting down if the context is done: neither record cancellation
+	// errors on the package (which would log an unknown-error diagnostic) nor
+	// type check. Packages that import this one will have ld.Context.Err() != nil.
+	// ld.Context.Err() will be returned later by refine.
+	if ld.Context.Err() != nil {
+		return
+	}
 	for _, err := range errs {
 		appendError(err)
 	}
 
 	lpkg.Syntax = files
 	if ld.Config.Mode&(NeedTypes|NeedTypesInfo) == 0 {
-		return
-	}
-
-	// Start shutting down if the context is done and do not type check.
-	// Packages that import this one will have ld.Context.Err() != nil.
-	// ld.Context.Err() will be returned later by refine.
-	if ld.Context.Err() != nil {
 		return
 	}
 
@@ -1267,8 +1269,8 @@ func (ld *loader) loadPackage(lpkg *loaderPackage) {
 	}
 
 	// Type-checking is CPU intensive.
-	cpuLimit <- unit{}            // acquire a token
-	defer func() { <-cpuLimit }() // release a token
+	ld.cpuLimit <- unit{}               // acquire a token
+	defer func() { <-ld.cpuLimit }()    // release a token
 
 	typErr := types.NewChecker(tc, ld.Fset, lpkg.Types, lpkg.TypesInfo).Files(lpkg.Syntax)
 	lpkg.importErrors = nil // no longer needed
@@ -1351,13 +1353,6 @@ type importerFunc func(path string) (*types.Package, error)
 
 func (f importerFunc) Import(path string) (*types.Package, error) { return f(path) }
 
-// We use a counting semaphore to limit
-// the number of parallel I/O calls or CPU threads per process.
-var (
-	ioLimit  = make(chan unit, 20)
-	cpuLimit = make(chan unit, runtime.GOMAXPROCS(0))
-)
-
 func (ld *loader) parseFile(filename string) (*ast.File, error) {
 	ld.parseCacheMu.Lock()
 	v, ok := ld.parseCache[filename]
@@ -1370,6 +1365,12 @@ func (ld *loader) parseFile(filename string) (*ast.File, error) {
 		v = &parseValue{ready: make(chan struct{})}
 		ld.parseCache[filename] = v
 		ld.parseCacheMu.Unlock()
+
+		if err := ld.Context.Err(); err != nil {
+			v.err = err
+			close(v.ready)
+			return nil, err
+		}
 
 		var src []byte
 		for f, contents := range ld.Config.Overlay {
@@ -1384,17 +1385,17 @@ func (ld *loader) parseFile(filename string) (*ast.File, error) {
 		}
 		var err error
 		if src == nil {
-			ioLimit <- unit{} // acquire a token
+			ld.ioLimit <- unit{} // acquire a token
 			src, err = os.ReadFile(filename)
-			<-ioLimit // release a token
+			<-ld.ioLimit // release a token
 		}
 		if err != nil {
 			v.err = err
 		} else {
 			// Parsing is CPU intensive.
-			cpuLimit <- unit{} // acquire a token
+			ld.cpuLimit <- unit{} // acquire a token
 			v.f, v.err = ld.ParseFile(ld.Fset, filename, src)
-			<-cpuLimit // release a token
+			<-ld.cpuLimit // release a token
 		}
 
 		close(v.ready)

@@ -50,6 +50,13 @@ type Program struct {
 	objectMethodsMu sync.Mutex
 	objectMethods   map[*types.Func]*Function
 
+	// printMu serializes printing of Packages/Functions to stdout.
+	printMu sync.Mutex
+
+	// Canonical synthetic SSA types for this Program.
+	rangeIterType  *types.Named
+	deferStackType *types.Named
+
 	noReturn func(*types.Func) bool // (optional) predicate that decides whether a given call cannot return
 }
 

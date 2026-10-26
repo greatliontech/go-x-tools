@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"go/token"
 	"go/types"
-	"sync"
 	// This package is dependency-restricted; see x/tools/go/gcexportdata.TestDeps.
 )
 
@@ -58,21 +57,19 @@ func (s *fakeFileSet) pos(file string, line, column int) token.Pos {
 }
 
 func (s *fakeFileSet) setLines() {
-	fakeLinesOnce.Do(func() {
-		fakeLines = make([]int, maxlines)
-		for i := range fakeLines {
-			fakeLines[i] = i
-		}
-	})
 	for _, f := range s.files {
 		f.file.SetLines(fakeLines[:f.lastline])
 	}
 }
 
-var (
-	fakeLines     []int
-	fakeLinesOnce sync.Once
-)
+var fakeLines []int
+
+func init() {
+	fakeLines = make([]int, maxlines)
+	for i := range fakeLines {
+		fakeLines[i] = i
+	}
+}
 
 func chanDir(d int) types.ChanDir {
 	// tag values must match the constants in cmd/compile/internal/gc/go.go

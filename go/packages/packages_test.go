@@ -6,7 +6,9 @@ package packages_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go/ast"
 	constantpkg "go/constant"
@@ -3790,5 +3792,43 @@ func cond[T any](cond bool, t, f T) T {
 		return t
 	} else {
 		return f
+	}
+}
+
+func TestLoadCancelDuringParseFilesNoInternalErrorLog(t *testing.T) {
+	exported := packagestest.Export(t, packagestest.Modules, []packagestest.Module{
+		{
+			Name: "fake/pkg",
+			Files: map[string]any{
+				"a.go": "package pkg\ntype A int\n",
+				"b.go": "package pkg\ntype B int\n",
+				"c.go": "package pkg\ntype C int\n",
+			},
+		},
+	})
+	t.Cleanup(exported.Cleanup)
+
+	var logBuf bytes.Buffer
+	origWriter := log.Writer()
+	log.SetOutput(&logBuf)
+	t.Cleanup(func() { log.SetOutput(origWriter) })
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	cfg := *exported.Config
+	cfg.Context = ctx
+	cfg.Mode = packages.LoadSyntax
+	cfg.ParseFile = func(fset *token.FileSet, filename string, src []byte) (*ast.File, error) {
+		cancel()
+		return parser.ParseFile(fset, filename, src, parser.AllErrors|parser.ParseComments)
+	}
+
+	_, err := packages.Load(&cfg, "fake/pkg")
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("packages.Load error = %v, want context.Canceled", err)
+	}
+	if strings.Contains(logBuf.String(), "internal error:") {
+		t.Fatalf("unexpected internal error logged during context cancellation: %s", logBuf.String())
 	}
 }

@@ -22,10 +22,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/greatliontech/go-x-tools/internal/event"
-	"github.com/greatliontech/go-x-tools/internal/event/keys"
-	"github.com/greatliontech/go-x-tools/internal/event/label"
 )
 
 // A Runner will run go command invocations and serialize
@@ -55,22 +51,9 @@ func (runner *Runner) initialize() {
 // 1.14: go: updating go.mod: existing contents have changed since last read
 var modConcurrencyError = regexp.MustCompile(`go:.*go.mod.*contents have changed`)
 
-// event keys for go command invocations
-var (
-	verb      = keys.NewString("verb", "go command verb")
-	directory = keys.NewString("directory", "")
-)
-
-func invLabels(inv Invocation) []label.Label {
-	return []label.Label{verb.Of(inv.Verb), directory.Of(inv.WorkingDir)}
-}
-
 // Run is a convenience wrapper around RunRaw.
 // It returns only stdout and a "friendly" error.
 func (runner *Runner) Run(ctx context.Context, inv Invocation) (*bytes.Buffer, error) {
-	ctx, done := event.Start(ctx, "gocommand.Runner.Run", invLabels(inv)...)
-	defer done()
-
 	stdout, _, friendly, _ := runner.RunRaw(ctx, inv)
 	return stdout, friendly
 }
@@ -78,9 +61,6 @@ func (runner *Runner) Run(ctx context.Context, inv Invocation) (*bytes.Buffer, e
 // RunPiped runs the invocation serially, always waiting for any concurrent
 // invocations to complete first.
 func (runner *Runner) RunPiped(ctx context.Context, inv Invocation, stdout, stderr io.Writer) error {
-	ctx, done := event.Start(ctx, "gocommand.Runner.RunPiped", invLabels(inv)...)
-	defer done()
-
 	_, err := runner.runPiped(ctx, inv, stdout, stderr)
 	return err
 }
@@ -89,8 +69,6 @@ func (runner *Runner) RunPiped(ctx context.Context, inv Invocation, stdout, stde
 // go.mod changes.
 // Postcondition: both error results have same nilness.
 func (runner *Runner) RunRaw(ctx context.Context, inv Invocation) (*bytes.Buffer, *bytes.Buffer, error, error) {
-	ctx, done := event.Start(ctx, "gocommand.Runner.RunRaw", invLabels(inv)...)
-	defer done()
 	// Make sure the runner is always initialized.
 	runner.initialize()
 
@@ -99,8 +77,6 @@ func (runner *Runner) RunRaw(ctx context.Context, inv Invocation) (*bytes.Buffer
 
 	// If we encounter a load concurrency error, we need to retry serially.
 	if friendlyErr != nil && modConcurrencyError.MatchString(friendlyErr.Error()) {
-		event.Error(ctx, "Load concurrency error, will retry serially", err)
-
 		// Run serially by calling runPiped.
 		stdout.Reset()
 		stderr.Reset()

@@ -18,6 +18,7 @@ import (
 	"strings"
 
 	"github.com/greatliontech/go-x-tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 // Like ObjectOf, but panics instead of returning nil.
@@ -297,6 +298,16 @@ func (f *Function) createSyntacticParams(recv *ast.FieldList, functype *ast.Func
 func (fn *Function) createDeferStack() {
 	// Each syntactic function makes a call to ssa:deferstack,
 	// which is spilled to a local. Unused ones are later removed.
+	var tDeferStack *types.Named
+	if fn.Prog != nil && fn.Prog.deferStackType != nil {
+		tDeferStack = fn.Prog.deferStackType
+	} else {
+		tDeferStack = ssaNamedType(types.NewPackage("$ssa", "ssa"), "deferStack", tUnsafePointer)
+	}
+	vDeferStack := &Builtin{
+		name: "ssa:deferstack",
+		sig:  types.NewSignatureType(nil, nil, nil, nil, typesinternal.TupleOf(tDeferStack), false),
+	}
 	fn.deferstack = newVar("defer$stack", tDeferStack)
 	call := &Call{Call: CallCommon{Value: vDeferStack}}
 	call.setType(tDeferStack)
@@ -414,9 +425,9 @@ func (f *Function) done() {
 		f.build = nil // function is built
 
 		if f.Prog.mode&PrintFunctions != 0 {
-			printMu.Lock()
+			f.Prog.printMu.Lock()
 			f.WriteTo(os.Stdout)
-			printMu.Unlock()
+			f.Prog.printMu.Unlock()
 		}
 
 		if f.Prog.mode&SanityCheckFunctions != 0 {

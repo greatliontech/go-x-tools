@@ -6,32 +6,13 @@ package gcimporter
 
 import (
 	"go/types"
-	"sync"
 	// This package is dependency-restricted; see x/tools/go/gcexportdata.TestDeps.
 )
-
-// predecl is a cache for the predeclared types in types.Universe.
-//
-// Cache a distinct result based on the runtime value of any.
-// The pointer value of the any type varies based on GODEBUG settings.
-var predeclMu sync.Mutex
-var predecl map[types.Type][]types.Type
 
 func predeclared() []types.Type {
 	anyt := types.Universe.Lookup("any").Type()
 
-	predeclMu.Lock()
-	defer predeclMu.Unlock()
-
-	if pre, ok := predecl[anyt]; ok {
-		return pre
-	}
-
-	if predecl == nil {
-		predecl = make(map[types.Type][]types.Type)
-	}
-
-	decls := []types.Type{ // basic types
+	return []types.Type{ // basic types
 		types.Typ[types.Bool],
 		types.Typ[types.Int],
 		types.Typ[types.Int8],
@@ -81,9 +62,6 @@ func predeclared() []types.Type {
 		// any
 		anyt,
 	}
-
-	predecl[anyt] = decls
-	return decls
 }
 
 type anyType struct{}

@@ -181,8 +181,8 @@ func (s *sanity) checkInstr(idx int, instr Instruction) {
 		if !ok {
 			s.errorf("Next: Iter is %T, not *Range", instr.Iter)
 		}
-		if rng.Type() != tRangeIter {
-			s.errorf("Next: Iter has type %s, expected %s", rng.Type(), tRangeIter)
+		if !isRangeIterType(s.fn.Prog, rng.Type()) {
+			s.errorf("Next: Iter has type %s, expected %s", rng.Type(), tRangeIter(s.fn.Prog))
 		}
 		var ek, ev types.Type
 		switch xt := typeparams.CoreType(rng.X.Type()).(type) {

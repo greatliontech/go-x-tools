@@ -85,50 +85,59 @@ import (
 	"slices"
 
 	"github.com/greatliontech/go-x-tools/internal/typeparams"
-	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 	"github.com/greatliontech/go-x-tools/internal/versions"
 )
 
 var (
-	varOk    = newVar("ok", tBool)
-	varIndex = newVar("index", tInt)
-
 	// Type constants.
 	tBool          = types.Typ[types.Bool]
 	tByte          = types.Typ[types.Byte]
-	tRune          = types.Universe.Lookup("rune").Type() // prints as "rune" (Typ[Rune] is same as Int32)
+	tRune          = types.Universe.Lookup("rune").Type().(*types.Basic) // prints as "rune" (Typ[Rune] is same as Int32)
 	tInt           = types.Typ[types.Int]
 	tInvalid       = types.Typ[types.Invalid]
 	tString        = types.Typ[types.String]
 	tUntypedNil    = types.Typ[types.UntypedNil]
 	tUnsafePointer = types.Typ[types.UnsafePointer]
-	tRangeIter     = ssaNamedType("rangeIter", tUnsafePointer)  // the type of all "range" iterators
-	tDeferStack    = ssaNamedType("deferStack", tUnsafePointer) // the type of a "deferStack" from ssa:deferstack()
-	tEface         = types.NewInterfaceType(nil, nil).Complete()
-
-	// Fake package for fake ssa types.
-	ssaFakeTypesPackage = types.NewPackage("$ssa", "ssa")
-
-	// SSA Value constants.
-	vZero     = intConst(0)
-	vOne      = intConst(1)
-	vTrue     = NewConst(constant.MakeBool(true), tBool)
-	vFalse    = NewConst(constant.MakeBool(false), tBool)
-	vNoReturn = NewConst(constant.MakeString("noreturn"), tString)
-
-	jReady = intConst(0)  // range-over-func jump is READY
-	jBusy  = intConst(-1) // range-over-func jump is BUSY
-	jDone  = intConst(-2) // range-over-func jump is DONE
-
-	// The ssa:deferstack intrinsic returns the current function's defer stack.
-	vDeferStack = &Builtin{
-		name: "ssa:deferstack",
-		sig:  types.NewSignatureType(nil, nil, nil, nil, typesinternal.TupleOf(tDeferStack), false),
-	}
 )
 
-func ssaNamedType(name string, underlying types.Type) *types.Named {
-	obj := types.NewTypeName(token.NoPos, ssaFakeTypesPackage, name, nil)
+func varOk() *types.Var    { return newVar("ok", tBool) }
+func varIndex() *types.Var { return newVar("index", tInt) }
+
+// tRangeIter returns the canonical type of all "range" iterators in prog.
+func tRangeIter(prog *Program) *types.Named {
+	if prog != nil && prog.rangeIterType != nil {
+		return prog.rangeIterType
+	}
+	return ssaNamedType(types.NewPackage("$ssa", "ssa"), "rangeIter", tUnsafePointer)
+}
+
+func isRangeIterType(prog *Program, t types.Type) bool {
+	if prog != nil && prog.rangeIterType != nil {
+		return t == prog.rangeIterType
+	}
+	named, ok := t.(*types.Named)
+	return ok && named.Obj().Name() == "rangeIter" && named.Obj().Pkg() != nil && named.Obj().Pkg().Path() == "$ssa"
+}
+
+func tEface() *types.Interface { return types.NewInterfaceType(nil, nil).Complete() }
+
+func vZero() *Const     { return intConst(0) }
+func vOne() *Const      { return intConst(1) }
+func vTrue() *Const     { return NewConst(constant.MakeBool(true), tBool) }
+func vFalse() *Const    { return NewConst(constant.MakeBool(false), tBool) }
+func vNoReturn() *Const { return NewConst(constant.MakeString("noreturn"), tString) }
+
+func isTrueConst(v Value) bool {
+	c, ok := v.(*Const)
+	return ok && c.typ == tBool && c.Value != nil && c.Value.Kind() == constant.Bool && constant.BoolVal(c.Value)
+}
+
+func jReady() *Const { return intConst(0) }  // range-over-func jump is READY
+func jBusy() *Const  { return intConst(-1) } // range-over-func jump is BUSY
+func jDone() *Const  { return intConst(-2) } // range-over-func jump is DONE
+
+func ssaNamedType(pkg *types.Package, name string, underlying types.Type) *types.Named {
+	obj := types.NewTypeName(token.NoPos, pkg, name, nil)
 	return types.NewNamed(obj, underlying, nil)
 }
 
@@ -378,7 +387,7 @@ func (b *builder) builtin(fn *Function, obj *types.Builtin, args []ast.Expr, typ
 			return fn.emit(v)
 
 		case *types.Chan:
-			var sz Value = vZero
+			var sz Value = vZero()
 			if len(args) == 2 {
 				sz = b.expr(fn, args[1])
 			}
@@ -412,11 +421,11 @@ func (b *builder) builtin(fn *Function, obj *types.Builtin, args []ast.Expr, typ
 
 	case "panic":
 		fn.emit(&Panic{
-			X:   emitConv(fn, b.expr(fn, args[0]), tEface),
+			X:   emitConv(fn, b.expr(fn, args[0]), tEface()),
 			pos: pos,
 		})
 		fn.currentBlock = fn.newBasicBlock("unreachable")
-		return vTrue // any non-nil Value will do
+		return vTrue() // any non-nil Value will do
 	}
 	return nil // treat all others as a regular function call
 }
@@ -861,7 +870,8 @@ func (b *builder) expr0(fn *Function, e ast.Expr, tv types.TypeAndValue) Value {
 					} else {
 						// rt may be instantiated as an interface.
 						// Emit nil check: typeassert (any(v)).(any).
-						emitTypeAssert(fn, emitConv(fn, v, tEface), tEface, token.NoPos)
+						eface := tEface()
+						emitTypeAssert(fn, emitConv(fn, v, eface), eface, token.NoPos)
 					}
 				} else {
 					// non-type param interface
@@ -1457,7 +1467,7 @@ func (b *builder) switchStmt(fn *Function, s *ast.SwitchStmt, label *lblock) {
 	if s.Init != nil {
 		b.stmt(fn, s.Init)
 	}
-	var tag Value = vTrue
+	var tag Value = vTrue()
 	if s.Tag != nil {
 		tag = b.expr(fn, s.Tag)
 	}
@@ -1500,7 +1510,7 @@ func (b *builder) switchStmt(fn *Function, s *ast.SwitchStmt, label *lblock) {
 			nextCond = fn.newBasicBlock("switch.next")
 			// For boolean switches, emit short-circuit control flow,
 			// just like an if/else-chain.
-			if tag == vTrue && !isNonTypeParamInterface(fn.info.Types[cond].Type) {
+			if s.Tag == nil && !isNonTypeParamInterface(fn.info.Types[cond].Type) {
 				b.cond(fn, cond, body, nextCond)
 			} else {
 				c := emitCompare(fn, token.EQL, tag, b.expr(fn, cond), cond.Pos())
@@ -1754,7 +1764,7 @@ func (b *builder) selectStmt(fn *Function, s *ast.SelectStmt, label *lblock) {
 	}
 	sel.setPos(s.Select)
 	var vars []*types.Var
-	vars = append(vars, varIndex, varOk)
+	vars = append(vars, varIndex(), varOk())
 	for _, st := range states {
 		if st.Dir == types.RecvOnly {
 			chtyp := typeparams.CoreType(fn.typ(st.Chan.Type())).(*types.Chan)
@@ -1833,7 +1843,7 @@ func (b *builder) selectStmt(fn *Function, s *ast.SelectStmt, label *lblock) {
 		// A blocking select must match some case.
 		// (This should really be a runtime.errorString, not a string.)
 		fn.emit(&Panic{
-			X: emitConv(fn, stringConst("blocking select matched no case"), tEface),
+			X: emitConv(fn, stringConst("blocking select matched no case"), tEface()),
 		})
 		fn.currentBlock = fn.newBasicBlock("unreachable")
 	}
@@ -2119,7 +2129,7 @@ func (b *builder) rangeIndexed(fn *Function, x Value, tv types.Type, pos token.P
 	incr := &BinOp{
 		Op: token.ADD,
 		X:  emitLoad(fn, index),
-		Y:  vOne,
+		Y:  vOne(),
 	}
 	incr.setType(tInt)
 	emitStore(fn, index, fn.emit(incr), pos)
@@ -2187,7 +2197,7 @@ func (b *builder) rangeIter(fn *Function, x Value, tk, tv types.Type, pos token.
 
 	rng := &Range{X: x}
 	rng.setPos(pos)
-	rng.setType(tRangeIter)
+	rng.setType(tRangeIter(fn.Prog))
 	it := fn.emit(rng)
 
 	loop = fn.newBasicBlock("rangeiter.loop")
@@ -2214,7 +2224,7 @@ func (b *builder) rangeIter(fn *Function, x Value, tk, tv types.Type, pos token.
 		IsString: isString,
 	}
 	okv.setType(types.NewTuple(
-		varOk,
+		varOk(),
 		newVar("k", ak),
 		newVar("v", av),
 	))
@@ -2265,7 +2275,7 @@ func (b *builder) rangeChan(fn *Function, x Value, tk types.Type, pos token.Pos)
 	recv.setPos(pos)
 	recv.setType(types.NewTuple(
 		newVar("k", typeparams.CoreType(x.Type()).(*types.Chan).Elem()),
-		varOk,
+		varOk(),
 	))
 	ko := fn.emit(recv)
 	body := fn.newBasicBlock("rangechan.body")
@@ -2312,7 +2322,7 @@ func (b *builder) rangeInt(fn *Function, x Value, tk types.Type, pos token.Pos) 
 	incr := &BinOp{
 		Op: token.ADD,
 		X:  emitLoad(fn, iter),
-		Y:  emitConv(fn, vOne, T),
+		Y:  emitConv(fn, vOne(), T),
 	}
 	incr.setType(T)
 	emitStore(fn, iter, fn.emit(incr), pos)
@@ -2644,19 +2654,19 @@ func (b *builder) buildYieldResume(fn *Function, jump *types.Var, exits []*exit,
 	// case BUSY: panic("...")
 	isbusy := fn.newBasicBlock("rangefunc.resume.busy")
 	ifready := fn.newBasicBlock("rangefunc.resume.ready.check")
-	emitIf(fn, emitCompare(fn, token.EQL, v, jBusy, token.NoPos), isbusy, ifready)
+	emitIf(fn, emitCompare(fn, token.EQL, v, jBusy(), token.NoPos), isbusy, ifready)
 	fn.currentBlock = isbusy
 	fn.emit(&Panic{
-		X: emitConv(fn, stringConst("iterator call did not preserve panic"), tEface),
+		X: emitConv(fn, stringConst("iterator call did not preserve panic"), tEface()),
 	})
 	fn.currentBlock = ifready
 
 	// case READY: jump = DONE; goto done
 	isready := fn.newBasicBlock("rangefunc.resume.ready")
 	ifexit := fn.newBasicBlock("rangefunc.resume.exits")
-	emitIf(fn, emitCompare(fn, token.EQL, v, jReady, token.NoPos), isready, ifexit)
+	emitIf(fn, emitCompare(fn, token.EQL, v, jReady(), token.NoPos), isready, ifexit)
 	fn.currentBlock = isready
-	storeVar(fn, jump, jDone, token.NoPos)
+	storeVar(fn, jump, jDone(), token.NoPos)
 	emitJump(fn, done)
 	fn.currentBlock = ifexit
 
@@ -2687,7 +2697,7 @@ func (b *builder) buildYieldResume(fn *Function, jump *types.Var, exits []*exit,
 			// case EXIT(id): { fn.jump = id; return false }
 			// fn is a range-over-func function.
 			storeVar(fn, fn.jump, id, token.NoPos)
-			fn.emit(&Return{Results: []Value{vFalse}, pos: e.pos})
+			fn.emit(&Return{Results: []Value{vFalse()}, pos: e.pos})
 
 		case e.block == nil && e.label == nil: // return from fn?
 			// case EXIT(id): { return ... }
@@ -2871,7 +2881,7 @@ func (b *builder) branchStmt(fn *Function, s *ast.BranchStmt) {
 		// fn must be a range-over-func
 		e := blockExit(fn, block, s.Pos())
 		storeVar(fn, fn.jump, intConst(e.id), e.pos)
-		fn.emit(&Return{Results: []Value{vFalse}, pos: e.pos})
+		fn.emit(&Return{Results: []Value{vFalse()}, pos: e.pos})
 	}
 	fn.currentBlock = fn.newBasicBlock("unreachable")
 }
@@ -2916,7 +2926,7 @@ func (b *builder) returnStmt(fn *Function, s *ast.ReturnStmt) {
 		// but the generated code is in the 'switch jump {...}' after it.
 		e := returnExit(fn, s.Pos())
 		storeVar(fn, fn.jump, intConst(e.id), e.pos)
-		fn.emit(&Return{Results: []Value{vFalse}, pos: e.pos})
+		fn.emit(&Return{Results: []Value{vFalse()}, pos: e.pos})
 		fn.currentBlock = fn.newBasicBlock("unreachable")
 		return
 	}
@@ -3073,9 +3083,9 @@ func (b *builder) buildYieldFunc(fn *Function) {
 	//   return true
 	saved := fn.currentBlock
 	fn.currentBlock = ycont
-	storeVar(fn, fn.jump, jReady, s.Body.Rbrace)
+	storeVar(fn, fn.jump, jReady(), s.Body.Rbrace)
 	// A yield function's own deferstack is always empty, so rundefers is not needed.
-	fn.emit(&Return{Results: []Value{vTrue}, pos: token.NoPos})
+	fn.emit(&Return{Results: []Value{vTrue()}, pos: token.NoPos})
 
 	// Emit header:
 	//
@@ -3087,14 +3097,14 @@ func (b *builder) buildYieldFunc(fn *Function) {
 	invalid := fn.newBasicBlock("yield-invalid")
 
 	jumpVal := emitLoad(fn, fn.lookup(fn.jump, true))
-	emitIf(fn, emitCompare(fn, token.EQL, jumpVal, jReady, token.NoPos), yloop, invalid)
+	emitIf(fn, emitCompare(fn, token.EQL, jumpVal, jReady(), token.NoPos), yloop, invalid)
 	fn.currentBlock = invalid
 	fn.emit(&Panic{
-		X: emitConv(fn, stringConst("yield function called after range loop exit"), tEface),
+		X: emitConv(fn, stringConst("yield function called after range loop exit"), tEface()),
 	})
 
 	fn.currentBlock = yloop
-	storeVar(fn, fn.jump, jBusy, s.Body.Rbrace)
+	storeVar(fn, fn.jump, jBusy(), s.Body.Rbrace)
 
 	// Initialize k and v from params.
 	var tk, tv types.Type
@@ -3161,7 +3171,7 @@ func (b *builder) buildYieldFunc(fn *Function) {
 			fn.currentBlock = lb._goto
 			id := intConst(e.id)
 			storeVar(fn, fn.jump, id, e.pos)
-			fn.emit(&Return{Results: []Value{vFalse}, pos: e.pos})
+			fn.emit(&Return{Results: []Value{vFalse()}, pos: e.pos})
 		}
 
 		if e.to != fn { // e needs to be handled by the parent too.
@@ -3194,6 +3204,10 @@ func addMakeInterfaceType(prog *Program, t types.Type) {
 // Build is idempotent and thread-safe.
 func (prog *Program) Build() {
 	var wg sync.WaitGroup
+	var cpuLimit chan unit
+	if prog.mode&BuildSerially == 0 {
+		cpuLimit = make(chan unit, runtime.GOMAXPROCS(0))
+	}
 	for _, p := range prog.packages {
 		if prog.mode&BuildSerially != 0 {
 			p.Build()
@@ -3209,9 +3223,6 @@ func (prog *Program) Build() {
 	}
 	wg.Wait()
 }
-
-// cpuLimit is a counting semaphore to limit CPU parallelism.
-var cpuLimit = make(chan unit, runtime.GOMAXPROCS(0))
 
 // Build builds SSA code for all functions and vars in package p.
 //
@@ -3260,7 +3271,7 @@ func (b *builder) buildPackageInit(fn *Function) {
 		done = fn.newBasicBlock("init.done")
 		emitIf(fn, emitLoad(fn, initguard), done, doinit)
 		fn.currentBlock = doinit
-		emitStore(fn, initguard, vTrue, token.NoPos)
+		emitStore(fn, initguard, vTrue(), token.NoPos)
 
 		// Call the init() function of each package we import.
 		for _, pkg := range p.Pkg.Imports() {

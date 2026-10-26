@@ -181,13 +181,11 @@ func newVar(name string, typ types.Type) *types.Var {
 	return types.NewParam(token.NoPos, nil, name, typ)
 }
 
-var lenResults = typesinternal.TupleOf(tInt)
-
 // makeLen returns the len builtin specialized to type func(T)int.
 func makeLen(T types.Type) *Builtin {
 	return &Builtin{
 		name: "len",
-		sig:  types.NewSignatureType(nil, nil, nil, typesinternal.TupleOf(T), lenResults, false),
+		sig:  types.NewSignatureType(nil, nil, nil, typesinternal.TupleOf(T), typesinternal.TupleOf(tInt), false),
 	}
 }
 
