@@ -372,7 +372,12 @@ notfound:
 
 var pkgExts = [...]string{".a", ".o"} // a file from the build cache will have no extension
 
-var exportMap sync.Map // package dir → func() (string, error)
+type gorootExportEntry struct {
+	path string
+	err  string
+}
+
+var exportMap sync.Map // package dir → gorootExportEntry
 
 // lookupGorootExport returns the location of the export data
 // (normally found in the build cache, but located in GOROOT/pkg
@@ -384,39 +389,38 @@ var exportMap sync.Map // package dir → func() (string, error)
 //
 // lookupGorootExport is only used in tests within x/tools.
 func lookupGorootExport(pkgDir string) (string, error) {
-	f, ok := exportMap.Load(pkgDir)
-	if !ok {
-		var (
-			listOnce   sync.Once
-			exportPath string
-			err        error
-		)
-		f, _ = exportMap.LoadOrStore(pkgDir, func() (string, error) {
-			listOnce.Do(func() {
-				cmd := exec.Command(filepath.Join(build.Default.GOROOT, "bin", "go"), "list", "-export", "-f", "{{.Export}}", pkgDir)
-				cmd.Dir = build.Default.GOROOT
-				cmd.Env = append(os.Environ(), "PWD="+cmd.Dir, "GOROOT="+build.Default.GOROOT)
-				var output []byte
-				output, err = cmd.Output()
-				if err != nil {
-					if ee, ok := err.(*exec.ExitError); ok && len(ee.Stderr) > 0 {
-						err = errors.New(string(ee.Stderr))
-					}
-					return
-				}
-
-				exports := strings.Split(string(bytes.TrimSpace(output)), "\n")
-				if len(exports) != 1 {
-					err = fmt.Errorf("go list reported %d exports; expected 1", len(exports))
-					return
-				}
-
-				exportPath = exports[0]
-			})
-
-			return exportPath, err
-		})
+	if v, ok := exportMap.Load(pkgDir); ok {
+		entry := v.(gorootExportEntry)
+		if entry.err != "" {
+			return "", errors.New(entry.err)
+		}
+		return entry.path, nil
 	}
 
-	return f.(func() (string, error))()
+	var entry gorootExportEntry
+	cmd := exec.Command(filepath.Join(build.Default.GOROOT, "bin", "go"), "list", "-export", "-f", "{{.Export}}", pkgDir)
+	cmd.Dir = build.Default.GOROOT
+	cmd.Env = append(os.Environ(), "PWD="+cmd.Dir, "GOROOT="+build.Default.GOROOT)
+	output, err := cmd.Output()
+	if err != nil {
+		if ee, ok := err.(*exec.ExitError); ok && len(ee.Stderr) > 0 {
+			entry.err = string(ee.Stderr)
+		} else {
+			entry.err = err.Error()
+		}
+	} else {
+		exports := strings.Split(string(bytes.TrimSpace(output)), "\n")
+		if len(exports) != 1 {
+			entry.err = fmt.Sprintf("go list reported %d exports; expected 1", len(exports))
+		} else {
+			entry.path = exports[0]
+		}
+	}
+
+	v, _ := exportMap.LoadOrStore(pkgDir, entry)
+	stored := v.(gorootExportEntry)
+	if stored.err != "" {
+		return "", errors.New(stored.err)
+	}
+	return stored.path, nil
 }
