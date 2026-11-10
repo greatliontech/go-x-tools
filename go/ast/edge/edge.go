@@ -182,7 +182,8 @@ type fieldInfo struct {
 }
 
 func info[N ast.Node](fieldName string) fieldInfo {
-	nodePtrType := reflect.TypeFor[N]()
+	var zero N
+	nodePtrType := reflect.TypeOf(zero)
 	f, ok := nodePtrType.Elem().FieldByName(fieldName)
 	if !ok {
 		panic(fieldName)

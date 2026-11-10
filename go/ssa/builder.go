@@ -92,13 +92,15 @@ var (
 	// Type constants.
 	tBool          = types.Typ[types.Bool]
 	tByte          = types.Typ[types.Byte]
-	tRune          = types.Universe.Lookup("rune").Type().(*types.Basic) // prints as "rune" (Typ[Rune] is same as Int32)
 	tInt           = types.Typ[types.Int]
 	tInvalid       = types.Typ[types.Invalid]
 	tString        = types.Typ[types.String]
 	tUntypedNil    = types.Typ[types.UntypedNil]
 	tUnsafePointer = types.Typ[types.UnsafePointer]
 )
+
+// tRune returns the Universe "rune" type, which prints as "rune" (Typ[Rune] is same as Int32).
+func tRune() *types.Basic { return types.Universe.Lookup("rune").Type().(*types.Basic) }
 
 func varOk() *types.Var    { return newVar("ok", tBool) }
 func varIndex() *types.Var { return newVar("index", tInt) }
@@ -2210,7 +2212,7 @@ func (b *builder) rangeIter(fn *Function, x Value, tk, tv types.Type, pos token.
 		ak, av = m.Key(), m.Elem()
 	} else {
 		isString = true
-		ak, av = tInt, tRune
+		ak, av = tInt, tRune()
 	}
 	if tk == nil {
 		ak = tInvalid

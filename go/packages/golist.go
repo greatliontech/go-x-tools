@@ -25,9 +25,6 @@ import (
 	"github.com/greatliontech/go-x-tools/internal/packagesinternal"
 )
 
-// debug controls verbose logging.
-var debug, _ = strconv.ParseBool(os.Getenv("GOPACKAGESDEBUG"))
-
 // A goTooOldError reports that the go command
 // found by exec.LookPath is too old to use the new go list behavior.
 type goTooOldError struct {
