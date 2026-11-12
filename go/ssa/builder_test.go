@@ -1411,9 +1411,18 @@ func TestFakeRangeIterType(t *testing.T) {
 	// Testing the two different kinds of fake types.
 	const source = `package p
 
-func rangeMap(m map[string]int) {
+type MyBool bool
+
+func rangeMap(m map[string]int, s string, b bool, mb MyBool) bool {
 	for range m {
 	}
+	for range s {
+	}
+	switch true {
+	case b:
+		return true == b
+	}
+	return MyBool(true) == mb
 }
 
 func rangeFunc(seq func(func() bool)) {
@@ -1421,22 +1430,42 @@ func rangeFunc(seq func(func() bool)) {
 		defer func() {}()
 	}
 }
+
+func rangeFunc2(seq func(func() bool)) {
+	for range seq {
+		defer func() {}()
+	}
+}
 `
 	pkg, _ := buildPackage(t, source, ssa.SanityCheckFunctions)
-	var rangeType types.Type
+	var rangeTypes []types.Type
 	for rangeInst := range findInstructions[*ssa.Range](pkg.Func("rangeMap")) {
-		rangeType = rangeInst.Type()
+		rangeTypes = append(rangeTypes, rangeInst.Type())
 	}
-	testSSAType(rangeType, "$ssa.rangeIter")
+	if len(rangeTypes) != 2 {
+		t.Fatalf("got %d Range instructions, want 2", len(rangeTypes))
+	}
+	testSSAType(rangeTypes[0], "$ssa.rangeIter")
+	if !types.Identical(rangeTypes[0], rangeTypes[1]) {
+		t.Errorf("Range types across loops are not identical: %v vs %v", rangeTypes[0], rangeTypes[1])
+	}
 
-	var deferStackType types.Type
+	var deferStackType, deferStackType2 types.Type
 	// the defer statement is in the only anonymous function inside of "rangeFunc"
 	for deferInst := range findInstructions[*ssa.Defer](pkg.Func("rangeFunc").AnonFuncs[0]) {
 		if deferInst.DeferStack != nil {
 			deferStackType = deferInst.DeferStack.Type()
 		}
 	}
+	for deferInst := range findInstructions[*ssa.Defer](pkg.Func("rangeFunc2").AnonFuncs[0]) {
+		if deferInst.DeferStack != nil {
+			deferStackType2 = deferInst.DeferStack.Type()
+		}
+	}
 	testSSAType(deferStackType, "$ssa.deferStack")
+	if !types.Identical(deferStackType, deferStackType2) {
+		t.Errorf("DeferStack types across functions are not identical: %v vs %v", deferStackType, deferStackType2)
+	}
 }
 
 func TestBuildPackageGo120(t *testing.T) {

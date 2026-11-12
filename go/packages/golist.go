@@ -554,7 +554,6 @@ func (state *golistState) createDriverResponse(words ...string) (*DriverResponse
 			EmbedPatterns:   absJoin(p.Dir, p.EmbedPatterns),
 			IgnoredFiles:    absJoin(p.Dir, p.IgnoredGoFiles, p.IgnoredOtherFiles),
 			ForTest:         p.ForTest,
-			depsErrors:      p.DepsErrors,
 			Module:          p.Module,
 		}
 
@@ -920,7 +919,7 @@ func (state *golistState) invokeGo(verb string, args ...string) (*bytes.Buffer, 
 	inv.Verb = verb
 	inv.Args = args
 
-	stdout, stderr, friendlyErr, err := state.runner.RunRaw(cfg.Context, inv)
+	stdout, stderr, friendlyErr, err := state.runner.RunRaw(state.ctx, inv)
 	if err != nil {
 		// Check for 'go' executable not being found.
 		if ee, ok := err.(*exec.Error); ok && ee.Err == exec.ErrNotFound {

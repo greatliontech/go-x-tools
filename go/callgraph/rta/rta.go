@@ -474,7 +474,7 @@ func fingerprint(mset *types.MethodSet) uint64 {
 		if sig.TypeParams() != nil {
 			continue // skip generic methods since interfaces don't have them
 		}
-		sum := crc32.ChecksumIEEE(fmt.Appendf(space[:], "%s/%d/%d",
+		sum := crc32.ChecksumIEEE(fmt.Appendf(space[:0], "%s/%d/%d",
 			method.Id(),
 			sig.Params().Len(),
 			sig.Results().Len()))

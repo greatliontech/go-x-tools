@@ -7,8 +7,6 @@ package packagesinternal
 
 import "fmt"
 
-var GetDepsErrors = func(p any) []*PackageError { return nil }
-
 type PackageError struct {
 	ImportStack []string // shortest path from package named on command line to this one
 	Pos         string   // position of error (if present, file:line:col)
@@ -19,5 +17,7 @@ func (err PackageError) String() string {
 	return fmt.Sprintf("%s: %s (import stack: %s)", err.Pos, err.Err, err.ImportStack)
 }
 
-var TypecheckCgo int
-var DepsErrors int // must be set as a LoadMode to call GetDepsErrors
+const (
+	DepsErrors   = 1 << 10
+	TypecheckCgo = 1 << 12
+)
