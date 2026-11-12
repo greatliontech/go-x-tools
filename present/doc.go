@@ -4,7 +4,7 @@
 
 /*
 Package present implements parsing and rendering of present files,
-which can be slide presentations as in golang.org/x/tools/cmd/present
+which can be slide presentations as in github.com/greatliontech/go-x-tools/cmd/present
 or articles as in golang.org/x/blog (the Go blog).
 
 This package assumes presentation authors are trusted,
@@ -382,4 +382,4 @@ Notes may appear anywhere within the slide text. For example:
 
 	: Presenter notes (subsequent paragraph(s))
 */
-package present // import "golang.org/x/tools/present"
+package present // import "github.com/greatliontech/go-x-tools/present"

@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/tools/internal/jsonrpc2"
+	"github.com/greatliontech/go-x-tools/internal/jsonrpc2"
 )
 
 type msg struct {

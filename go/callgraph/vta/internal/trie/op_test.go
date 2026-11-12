@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/tools/go/callgraph/vta/internal/trie"
+	"github.com/greatliontech/go-x-tools/go/callgraph/vta/internal/trie"
 	"maps"
 )
 

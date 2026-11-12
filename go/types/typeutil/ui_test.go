@@ -13,8 +13,8 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 func TestIntuitiveMethodSet(t *testing.T) {

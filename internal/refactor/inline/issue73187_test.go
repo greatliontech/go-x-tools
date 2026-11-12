@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
 )
 
 // TestIssue73187 tests that inlining does not panic on variadic calls when

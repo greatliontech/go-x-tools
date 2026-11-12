@@ -151,7 +151,7 @@ available in this map. Each Analyzer must return a value of the type
 described in its Analyzer.ResultType field.
 For example, the "ctrlflow" analyzer returns a *ctrlflow.CFGs, which
 provides a control-flow graph for each function in the package (see
-golang.org/x/tools/go/cfg); the "inspect" analyzer returns a value that
+github.com/greatliontech/go-x-tools/go/cfg); the "inspect" analyzer returns a value that
 enables other Analyzers to traverse the syntax trees of the package more
 efficiently; and the "buildssa" analyzer constructs an SSA-form
 intermediate representation.
@@ -276,7 +276,7 @@ expected to follow; see https://github.com/bazel-contrib/rules_go/issues/4702.)
 
 # Testing an Analyzer
 
-The [golang.org/x/tools/go/analysis/analysistest] subpackage provides
+The [github.com/greatliontech/go-x-tools/go/analysis/analysistest] subpackage provides
 utilities for testing an Analyzer.
 In a few lines of code, it is possible to run an analyzer on a package
 of testdata files and check that it reported all the expected
@@ -321,7 +321,7 @@ Their designs vary along several axes, including:
 
 We'll describe several specific drivers in terms of these axes.
 
-Unitchecker: the [golang.org/x/tools/go/analysis/unitchecker] driver
+Unitchecker: the [github.com/greatliontech/go-x-tools/go/analysis/unitchecker] driver
 is analogous to a compiler.
 It reads the source files of a single package, along with summary
 information for each of its direct dependency packages, then writes a
@@ -355,12 +355,12 @@ because they travel between processes in files that may be recorded
 in a content-addressable build cache.
 An analyzer must not assume that the whole program is available to it,
 nor communicate between packages by any means other than facts.
-And the unitchecker package does not use golang.org/x/tools/go/packages
+And the unitchecker package does not use github.com/greatliontech/go-x-tools/go/packages
 since it runs within a build action and should not start a metadata
 query of its own.
 
 Multichecker, singlechecker, and analysistest:
-the [golang.org/x/tools/go/analysis/multichecker] driver,
+the [github.com/greatliontech/go-x-tools/go/analysis/multichecker] driver,
 by contrast, executes the build system's metadata query tool
 (such as "go list") to obtain the import graph over packages.
 It then computes the whole analysis, in one address space,
@@ -372,7 +372,7 @@ analyzer and its command-line interface is correspondingly simpler.
 There is also a variant for analyzer testing, named analysistest, that
 works in a similar way.
 All three drivers are based on a common implementation in the
-[golang.org/x/tools/go/analysis/checker] package.
+[github.com/greatliontech/go-x-tools/go/analysis/checker] package.
 
 A driver of this form is easy to deploy, being a single self-contained
 command, but it repeats all of its work on each run, and may not
@@ -399,7 +399,7 @@ Both also provide suites of their own analyzers.
 
 Analyzers are provided in the form of packages that a driver program is
 expected to import. The vet command imports a suite of several analyzers
-(see [golang.org/x/tools/go/analysis/suite/vet]),
+(see [github.com/greatliontech/go-x-tools/go/analysis/suite/vet]),
 but users may wish to define their own analysis commands that perform
 additional checks. To simplify the task of creating an analysis command,
 either for a single analyzer or for a whole suite, we provide the
@@ -414,8 +414,8 @@ entirety as:
 	package main
 
 	import (
-		"golang.org/x/tools/go/analysis/passes/findcall"
-		"golang.org/x/tools/go/analysis/singlechecker"
+		"github.com/greatliontech/go-x-tools/go/analysis/passes/findcall"
+		"github.com/greatliontech/go-x-tools/go/analysis/singlechecker"
 	)
 
 	func main() { singlechecker.Main(findcall.Analyzer) }

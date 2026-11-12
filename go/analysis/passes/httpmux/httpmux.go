@@ -12,12 +12,12 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/inspect"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 	"golang.org/x/mod/semver"
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/inspect"
-	"golang.org/x/tools/go/ast/inspector"
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/typesinternal"
 )
 
 const Doc = `report using Go 1.22 enhanced ServeMux patterns in older Go versions

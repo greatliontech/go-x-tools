@@ -9,14 +9,14 @@ package chautil
 import (
 	"go/types"
 
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
 )
 
 // LazyCallees returns a function that maps a call site (in a function in fns)
 // to its callees within fns. The set of callees is computed using the CHA algorithm,
 // i.e., on the entire implements relation between interfaces and concrete types
-// in fns. Please see golang.org/x/tools/go/callgraph/cha for more information.
+// in fns. Please see github.com/greatliontech/go-x-tools/go/callgraph/cha for more information.
 //
 // The resulting function is not concurrency safe.
 func LazyCallees(fns map[*ssa.Function]bool) func(site ssa.CallInstruction) []*ssa.Function {

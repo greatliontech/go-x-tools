@@ -8,7 +8,7 @@ import (
 	"go/ast"
 	"testing"
 
-	. "golang.org/x/tools/internal/astutil"
+	. "github.com/greatliontech/go-x-tools/internal/astutil"
 )
 
 func TestGetIndexExprData(t *testing.T) {

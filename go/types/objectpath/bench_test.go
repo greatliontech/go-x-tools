@@ -10,9 +10,9 @@ import (
 	"go/types"
 	"testing"
 
-	"golang.org/x/tools/go/types/objectpath"
-	"golang.org/x/tools/internal/testfiles"
-	"golang.org/x/tools/txtar"
+	"github.com/greatliontech/go-x-tools/go/types/objectpath"
+	"github.com/greatliontech/go-x-tools/internal/testfiles"
+	"github.com/greatliontech/go-x-tools/txtar"
 )
 
 // BenchmarkMonster tests that objectpath operations on monstrously

@@ -13,9 +13,9 @@ import (
 	"testing"
 	"unsafe"
 
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/internal/gcimporter"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/internal/gcimporter"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 // TestStdlib ensures that all packages in std and x/tools can be
@@ -41,7 +41,7 @@ func TestStdlib(t *testing.T) {
 		// The go_.*_exec script for mobile builders only copies over the source tree
 		// for the package under test.
 	default:
-		patterns = append(patterns, "golang.org/x/tools/...")
+		patterns = append(patterns, "github.com/greatliontech/go-x-tools/...")
 		minPkgs += 160 // At the time of writing, 'GOOS=plan9 go list ./... | wc -l' reports 188.
 	}
 	pkgs, err := packages.Load(cfg, patterns...)

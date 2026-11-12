@@ -21,8 +21,8 @@
 package main
 
 import (
-	"golang.org/x/tools/go/analysis/passes/inline"
-	"golang.org/x/tools/go/analysis/singlechecker"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/inline"
+	"github.com/greatliontech/go-x-tools/go/analysis/singlechecker"
 )
 
 func main() { singlechecker.Main(inline.Analyzer) }

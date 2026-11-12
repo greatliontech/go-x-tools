@@ -8,7 +8,7 @@ import (
 	"errors"
 	"testing"
 
-	"golang.org/x/tools/internal/event/keys"
+	"github.com/greatliontech/go-x-tools/internal/event/keys"
 )
 
 func TestLabelToAttribute_String(t *testing.T) {

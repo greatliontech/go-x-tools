@@ -13,8 +13,8 @@ import (
 	"slices"
 	"sync"
 
-	"golang.org/x/tools/go/cfg"
-	"golang.org/x/tools/internal/graph"
+	"github.com/greatliontech/go-x-tools/go/cfg"
+	"github.com/greatliontech/go-x-tools/internal/graph"
 )
 
 // CFG is a control flow graph over [ast.Node]s, including control flow within

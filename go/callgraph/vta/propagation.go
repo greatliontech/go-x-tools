@@ -9,10 +9,10 @@ import (
 	"iter"
 	"slices"
 
-	"golang.org/x/tools/go/callgraph/vta/internal/trie"
-	"golang.org/x/tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/callgraph/vta/internal/trie"
+	"github.com/greatliontech/go-x-tools/go/ssa"
 
-	"golang.org/x/tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
 )
 
 // scc computes strongly connected components (SCCs) of `g` using the

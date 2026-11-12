@@ -69,7 +69,7 @@ var abort = new(int) // singleton, to signal termination of Apply
 // can be used to change the AST without disrupting Apply.
 //
 // This type is not to be confused with [inspector.Cursor] from
-// package [golang.org/x/tools/go/ast/inspector], which provides
+// package [github.com/greatliontech/go-x-tools/go/ast/inspector], which provides
 // stateless navigation of immutable syntax trees.
 type Cursor struct {
 	parent ast.Node

@@ -14,9 +14,9 @@
 //
 // The resulting command is a whole-program driver: given a list of
 // package patterns, such as "./...", it loads the packages using
-// [golang.org/x/tools/go/packages] and analyzes them all in a single
+// [github.com/greatliontech/go-x-tools/go/packages] and analyzes them all in a single
 // process. See the Drivers section of the
-// [golang.org/x/tools/go/analysis] package documentation for more
+// [github.com/greatliontech/go-x-tools/go/analysis] package documentation for more
 // detail.
 //
 // For convenience, the command also detects when it is invoked in
@@ -26,7 +26,7 @@
 //
 // in which case it analyzes only the single compilation unit that the
 // build system describes to it; see
-// [golang.org/x/tools/go/analysis/unitchecker].
+// [github.com/greatliontech/go-x-tools/go/analysis/unitchecker].
 package multichecker
 
 import (
@@ -37,10 +37,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/internal/analysisflags"
-	"golang.org/x/tools/go/analysis/internal/checker"
-	"golang.org/x/tools/go/analysis/unitchecker"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/internal/analysisflags"
+	"github.com/greatliontech/go-x-tools/go/analysis/internal/checker"
+	"github.com/greatliontech/go-x-tools/go/analysis/unitchecker"
 )
 
 // Main is the main function for a checker command that runs the

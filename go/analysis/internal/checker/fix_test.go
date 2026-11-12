@@ -20,17 +20,17 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/checker"
-	"golang.org/x/tools/go/analysis/multichecker"
-	"golang.org/x/tools/go/analysis/passes/inspect"
-	"golang.org/x/tools/go/ast/inspector"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/internal/diff"
-	"golang.org/x/tools/internal/expect"
-	"golang.org/x/tools/internal/testenv"
-	"golang.org/x/tools/internal/testfiles"
-	"golang.org/x/tools/txtar"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/checker"
+	"github.com/greatliontech/go-x-tools/go/analysis/multichecker"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/inspect"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/internal/diff"
+	"github.com/greatliontech/go-x-tools/internal/expect"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/internal/testfiles"
+	"github.com/greatliontech/go-x-tools/txtar"
 )
 
 func TestMain(m *testing.M) {

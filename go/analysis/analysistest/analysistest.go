@@ -25,14 +25,14 @@ import (
 	"testing"
 	"text/scanner"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/checker"
-	"golang.org/x/tools/go/analysis/internal"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/internal/analysis/driverutil"
-	"golang.org/x/tools/internal/diff"
-	"golang.org/x/tools/internal/testenv"
-	"golang.org/x/tools/txtar"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/checker"
+	"github.com/greatliontech/go-x-tools/go/analysis/internal"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/internal/analysis/driverutil"
+	"github.com/greatliontech/go-x-tools/internal/diff"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/txtar"
 )
 
 // WriteFiles is a helper function that creates a temporary directory
@@ -153,7 +153,7 @@ func RunWithSuggestedFixes(t Testing, dir string, a *analysis.Analyzer, patterns
 		n := runtime.Callers(1, pcs[:])
 		frames := runtime.CallersFrames(pcs[:n])
 		fr, _ := frames.Next()
-		if fr.Func != nil && strings.HasPrefix(fr.Func.Name(), "golang.org/x/tools/") {
+		if fr.Func != nil && strings.HasPrefix(fr.Func.Name(), "github.com/greatliontech/go-x-tools/") {
 			inTools = true
 		}
 	}
@@ -358,7 +358,7 @@ func applyDiffsAndCompare(pkg *types.Package, filename string, original, want []
 // Run applies an analysis to the packages denoted by the "go list" patterns.
 //
 // It loads the packages from the specified
-// directory using golang.org/x/tools/go/packages, runs the analysis on
+// directory using github.com/greatliontech/go-x-tools/go/packages, runs the analysis on
 // them, and checks that each analysis emits the expected diagnostics
 // and facts specified by the contents of '// want ...' comments in the
 // package's source files. It treats a comment of the form

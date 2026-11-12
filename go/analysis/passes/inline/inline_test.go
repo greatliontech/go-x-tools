@@ -15,9 +15,9 @@ import (
 	"testing"
 
 	gocmp "github.com/google/go-cmp/cmp"
-	"golang.org/x/tools/go/analysis/analysistest"
-	"golang.org/x/tools/internal/testenv"
-	"golang.org/x/tools/internal/testfiles"
+	"github.com/greatliontech/go-x-tools/go/analysis/analysistest"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/internal/testfiles"
 )
 
 func TestAnalyzer(t *testing.T) {

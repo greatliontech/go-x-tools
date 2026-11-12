@@ -7,8 +7,8 @@ package unsafeptr_test
 import (
 	"testing"
 
-	"golang.org/x/tools/go/analysis/analysistest"
-	"golang.org/x/tools/go/analysis/passes/unsafeptr"
+	"github.com/greatliontech/go-x-tools/go/analysis/analysistest"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/unsafeptr"
 )
 
 func Test(t *testing.T) {

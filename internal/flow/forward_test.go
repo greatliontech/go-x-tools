@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/tools/internal/flow"
+	"github.com/greatliontech/go-x-tools/internal/flow"
 )
 
 type simpleGraph struct {

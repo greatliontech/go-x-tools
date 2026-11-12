@@ -16,8 +16,8 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/tools/internal/gocommand"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/internal/gocommand"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 // TestCancel_ProcessGroup checks that cancelling a Go command terminates

@@ -1,5 +1,10 @@
 # Go Tools
 
+> This is the Great Lion Technologies analysis fork. Its root module is
+> `github.com/greatliontech/go-x-tools`; use an explicit fork revision, not
+> an upstream tag or `@latest`. See [FORK.md](FORK.md) for scope and dependency
+> instructions. The upstream README follows unchanged.
+
 [![PkgGoDev](https://pkg.go.dev/badge/golang.org/x/tools)](https://pkg.go.dev/golang.org/x/tools)
 
 This repository provides the `golang.org/x/tools` module, comprising

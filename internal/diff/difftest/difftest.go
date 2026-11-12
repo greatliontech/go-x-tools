@@ -4,7 +4,7 @@
 
 // Package difftest supplies a set of tests that will operate on any
 // implementation of a diff algorithm as exposed by
-// "golang.org/x/tools/internal/diff"
+// "github.com/greatliontech/go-x-tools/internal/diff"
 package difftest
 
 // There are two kinds of tests, semantic tests, and 'golden data' tests.
@@ -20,7 +20,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
-	"golang.org/x/tools/internal/diff"
+	"github.com/greatliontech/go-x-tools/internal/diff"
 )
 
 const (

@@ -18,7 +18,7 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/internal/gcimporter"
+	"github.com/greatliontech/go-x-tools/internal/gcimporter"
 )
 
 var isRace = false

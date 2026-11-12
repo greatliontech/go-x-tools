@@ -11,8 +11,8 @@ import (
 	"testing"
 	"unsafe"
 
-	"golang.org/x/tools/internal/event/keys"
-	"golang.org/x/tools/internal/event/label"
+	"github.com/greatliontech/go-x-tools/internal/event/keys"
+	"github.com/greatliontech/go-x-tools/internal/event/label"
 )
 
 var (

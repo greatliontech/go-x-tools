@@ -12,9 +12,9 @@ import (
 	"reflect"
 	"testing"
 
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/internal/astutil"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/internal/astutil"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 func TestPurgeFuncBodiesCases(t *testing.T) {

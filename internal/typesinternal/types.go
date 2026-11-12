@@ -13,9 +13,9 @@
 //   - common algorithms related to types (e.g. [TooNewStdSymbols]).
 //
 // See also:
-//   - [golang.org/x/tools/internal/astutil], for operations on untyped syntax;
-//   - [golang.org/x/tools/internal/analysisinernal], for helpers for analyzers;
-//   - [golang.org/x/tools/internal/refactor], for operators to compute text edits.
+//   - [github.com/greatliontech/go-x-tools/internal/astutil], for operations on untyped syntax;
+//   - [github.com/greatliontech/go-x-tools/internal/analysisinernal], for helpers for analyzers;
+//   - [github.com/greatliontech/go-x-tools/internal/refactor], for operators to compute text edits.
 package typesinternal
 
 import (
@@ -25,7 +25,7 @@ import (
 	"iter"
 	"reflect"
 
-	"golang.org/x/tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
 )
 
 func SetUsesCgo(conf *types.Config) bool {

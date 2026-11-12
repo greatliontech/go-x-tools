@@ -68,7 +68,7 @@ func isDigit(ch rune) bool {
 	return '0' <= ch && ch <= '9' || ch >= 0x80 && unicode.IsDigit(ch)
 }
 
-// -- Plundered from golang.org/x/tools/cmd/guru -----------------
+// -- Plundered from github.com/greatliontech/go-x-tools/cmd/guru -----------------
 
 // sameFile returns true if x and y have the same basename and denote
 // the same file.

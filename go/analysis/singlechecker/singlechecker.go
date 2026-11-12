@@ -19,7 +19,7 @@
 //
 //	import (
 //		"example.com/findbadness"
-//		"golang.org/x/tools/go/analysis/singlechecker"
+//		"github.com/greatliontech/go-x-tools/go/analysis/singlechecker"
 //	)
 //
 //	func main() { singlechecker.Main(findbadness.Analyzer) }
@@ -34,7 +34,7 @@
 //	$ go vet -vettool=./findbadness [packages...]
 //
 // For more detail, see the documentation for
-// [golang.org/x/tools/go/analysis/multichecker]; the only significant
+// [github.com/greatliontech/go-x-tools/go/analysis/multichecker]; the only significant
 // difference between them is that the command-line interface of
 // singlechecker is tailored to a single analyzer.
 package singlechecker
@@ -46,10 +46,10 @@ import (
 	"os"
 	"strings"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/internal/analysisflags"
-	"golang.org/x/tools/go/analysis/internal/checker"
-	"golang.org/x/tools/go/analysis/unitchecker"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/internal/analysisflags"
+	"github.com/greatliontech/go-x-tools/go/analysis/internal/checker"
+	"github.com/greatliontech/go-x-tools/go/analysis/unitchecker"
 )
 
 // Main is the main function for a checker command for a single analysis.

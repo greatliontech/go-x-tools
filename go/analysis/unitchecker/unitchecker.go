@@ -44,15 +44,15 @@
 // running it in parallel with other actions, caching its result,
 // or skipping it entirely if none of its inputs have
 // changed--just like a compiler.
-// See the Drivers section of the [golang.org/x/tools/go/analysis]
+// See the Drivers section of the [github.com/greatliontech/go-x-tools/go/analysis]
 // package documentation for the contrast with whole-program drivers.
 //
-// This package does not use [golang.org/x/tools.go/packages] since it
+// This package does not use [github.com/greatliontech/go-x-tools.go/packages] since it
 // runs within a build action and cannot start a metadata query of its own.
 // Use this package directly only for a tool that is always invoked
 // by a build system.
 // For convenience, commands built with singlechecker or
-// [golang.org/x/tools/go/analysis/multichecker] support this protocol as
+// [github.com/greatliontech/go-x-tools/go/analysis/multichecker] support this protocol as
 // well, so they can detect when they are being invoked by a build tool
 // and run in package-at-a-time mode.
 package unitchecker
@@ -80,11 +80,11 @@ import (
 	"sync"
 	"time"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/internal/analysisflags"
-	"golang.org/x/tools/internal/analysis/driverutil"
-	"golang.org/x/tools/internal/facts"
-	"golang.org/x/tools/internal/gcimporter"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/internal/analysisflags"
+	"github.com/greatliontech/go-x-tools/internal/analysis/driverutil"
+	"github.com/greatliontech/go-x-tools/internal/facts"
+	"github.com/greatliontech/go-x-tools/internal/gcimporter"
 )
 
 // A Config describes a compilation unit to be analyzed.

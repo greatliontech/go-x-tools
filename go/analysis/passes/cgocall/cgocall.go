@@ -17,8 +17,8 @@ import (
 	"os"
 	"strconv"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 const debug = false

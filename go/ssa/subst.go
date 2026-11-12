@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"go/types"
 
-	"golang.org/x/tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
 )
 
 // subster defines a type substitution operation of a set of type parameters

@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"slices"
 
-	"golang.org/x/tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis"
 )
 
 // A ReadFileFunc is a function that returns the

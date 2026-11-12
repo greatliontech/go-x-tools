@@ -16,7 +16,7 @@ import (
 	"os"
 	"strings"
 
-	"golang.org/x/tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis"
 )
 
 // TODO(adonovan): don't accept an io.Writer if we don't report errors.

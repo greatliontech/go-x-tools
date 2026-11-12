@@ -12,7 +12,7 @@ import (
 	"slices"
 	"testing"
 
-	"golang.org/x/tools/internal/astutil"
+	"github.com/greatliontech/go-x-tools/internal/astutil"
 )
 
 func TestComments(t *testing.T) {

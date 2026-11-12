@@ -8,8 +8,8 @@ import (
 	"go/types"
 	"iter"
 
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
 )
 
 func canAlias(n1, n2 node) bool {

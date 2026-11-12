@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"go/ast"
 
-	"golang.org/x/tools/go/ast/edge"
+	"github.com/greatliontech/go-x-tools/go/ast/edge"
 )
 
 func walkList[N ast.Node](v *visitor, ek edge.Kind, list []N) {

@@ -36,7 +36,7 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/tools/go/packages"
+	"github.com/greatliontech/go-x-tools/go/packages"
 )
 
 func main() {

@@ -11,8 +11,8 @@ import (
 	"go/format"
 	"strings"
 
-	"golang.org/x/tools/go/ast/astutil"
-	internalastutil "golang.org/x/tools/internal/astutil"
+	"github.com/greatliontech/go-x-tools/go/ast/astutil"
+	internalastutil "github.com/greatliontech/go-x-tools/internal/astutil"
 )
 
 // String formats the control-flow graph for ease of debugging.

@@ -15,12 +15,12 @@ package fix
 import (
 	"slices"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/buildtag"
-	"golang.org/x/tools/go/analysis/passes/hostport"
-	"golang.org/x/tools/go/analysis/passes/inline"
-	"golang.org/x/tools/go/analysis/passes/modernize"
-	"golang.org/x/tools/go/analysis/passes/stringintconv"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/buildtag"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/hostport"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/inline"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/modernize"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/stringintconv"
 )
 
 // Suite is the suite of analyzers run by cmd/fix.

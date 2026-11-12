@@ -20,7 +20,7 @@ import (
 	"sort"
 	"strings"
 
-	"golang.org/x/tools/go/types/objectpath"
+	"github.com/greatliontech/go-x-tools/go/types/objectpath"
 	// This package is dependency-restricted; see x/tools/go/gcexportdata.TestDeps.
 )
 

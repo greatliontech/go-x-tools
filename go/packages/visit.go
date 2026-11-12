@@ -9,7 +9,7 @@ import (
 	"iter"
 	"os"
 
-	"golang.org/x/tools/internal/moremaps"
+	"github.com/greatliontech/go-x-tools/internal/moremaps"
 )
 
 // Visit visits all the packages in the import graph whose roots are

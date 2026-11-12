@@ -15,8 +15,8 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/cfg"
-	"golang.org/x/tools/txtar"
+	"github.com/greatliontech/go-x-tools/go/cfg"
+	"github.com/greatliontech/go-x-tools/txtar"
 )
 
 var update = flag.Bool("update", false, "update expected output")

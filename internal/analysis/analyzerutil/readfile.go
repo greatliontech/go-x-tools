@@ -10,7 +10,7 @@ import (
 	"go/token"
 	"os"
 
-	"golang.org/x/tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis"
 )
 
 // ReadFile reads a file and adds it to the FileSet in pass

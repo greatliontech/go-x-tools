@@ -12,14 +12,14 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 // rules lists "allow" or "deny" constraints on the transitive
 // dependencies among non-test packages in x/tools.
 var rules = [...]struct {
 	rationale string
-	from      []string // import paths or patterns (e.g. "golang.org/x/tools/...") of constrained packages
+	from      []string // import paths or patterns (e.g. "github.com/greatliontech/go-x-tools/...") of constrained packages
 	except    []string // import paths or patterns of packages matched by from that are not constrained
 	deny      []string // if set, packages that none of them may depend on
 	allow     []string // if set, the only packages of this module that they may depend on
@@ -27,29 +27,29 @@ var rules = [...]struct {
 	{
 		rationale: "syntax packages must not depend on the type checker",
 		from: []string{
-			"golang.org/x/tools/go/ast/astutil",
-			"golang.org/x/tools/go/ast/edge",
-			"golang.org/x/tools/go/ast/inspector",
-			"golang.org/x/tools/internal/astutil",
-			"golang.org/x/tools/internal/cursorutil",
+			"github.com/greatliontech/go-x-tools/go/ast/astutil",
+			"github.com/greatliontech/go-x-tools/go/ast/edge",
+			"github.com/greatliontech/go-x-tools/go/ast/inspector",
+			"github.com/greatliontech/go-x-tools/internal/astutil",
+			"github.com/greatliontech/go-x-tools/internal/cursorutil",
 		},
 		deny: []string{"go/types"},
 	},
 	{
 		rationale: "cursorutil must have no dependencies other than those of cursor itself",
-		from:      []string{"golang.org/x/tools/internal/cursorutil"},
+		from:      []string{"github.com/greatliontech/go-x-tools/internal/cursorutil"},
 		allow: []string{
-			"golang.org/x/tools/go/ast/edge",
-			"golang.org/x/tools/go/ast/inspector",
+			"github.com/greatliontech/go-x-tools/go/ast/edge",
+			"github.com/greatliontech/go-x-tools/go/ast/inspector",
 		},
 	},
 	{
 		rationale: "gcexportdata is vendored into std for use by go/importer, so must have minimal dependencies",
-		from:      []string{"golang.org/x/tools/go/gcexportdata"},
+		from:      []string{"github.com/greatliontech/go-x-tools/go/gcexportdata"},
 		allow: []string{
-			"golang.org/x/tools/go/types/objectpath",
-			"golang.org/x/tools/internal/gcimporter",
-			"golang.org/x/tools/internal/pkgbits",
+			"github.com/greatliontech/go-x-tools/go/types/objectpath",
+			"github.com/greatliontech/go-x-tools/internal/gcimporter",
+			"github.com/greatliontech/go-x-tools/internal/pkgbits",
 		},
 	},
 	{
@@ -58,26 +58,26 @@ var rules = [...]struct {
 		// $GOROOT/src/cmd/vendor/modules.txt). A violation would be
 		// discovered only when cmd next updates its vendored copy.
 		from: []string{
-			"golang.org/x/tools/cmd/bisect",
-			"golang.org/x/tools/cover",
-			"golang.org/x/tools/go/analysis/suite/fix",
-			"golang.org/x/tools/go/analysis/suite/vet",
-			"golang.org/x/tools/go/analysis/unitchecker",
+			"github.com/greatliontech/go-x-tools/cmd/bisect",
+			"github.com/greatliontech/go-x-tools/cover",
+			"github.com/greatliontech/go-x-tools/go/analysis/suite/fix",
+			"github.com/greatliontech/go-x-tools/go/analysis/suite/vet",
+			"github.com/greatliontech/go-x-tools/go/analysis/unitchecker",
 		},
 		deny: []string{
-			"golang.org/x/tools/go/packages",
-			"golang.org/x/tools/go/ssa",
-			"golang.org/x/tools/internal/event",
-			"golang.org/x/tools/internal/gocommand",
+			"github.com/greatliontech/go-x-tools/go/packages",
+			"github.com/greatliontech/go-x-tools/go/ssa",
+			"github.com/greatliontech/go-x-tools/internal/event",
+			"github.com/greatliontech/go-x-tools/internal/gocommand",
 			"testing",
 		},
 	},
 	{
 		rationale: "the analysis packages vendored into cmd (and, prospectively, std) must not depend on x/sync, so that std need not vendor it",
 		from: []string{
-			"golang.org/x/tools/go/analysis/suite/fix",
-			"golang.org/x/tools/go/analysis/suite/vet",
-			"golang.org/x/tools/go/analysis/unitchecker",
+			"github.com/greatliontech/go-x-tools/go/analysis/suite/fix",
+			"github.com/greatliontech/go-x-tools/go/analysis/suite/vet",
+			"github.com/greatliontech/go-x-tools/go/analysis/unitchecker",
 		},
 		deny: []string{
 			"golang.org/x/sync/errgroup",
@@ -88,43 +88,43 @@ var rules = [...]struct {
 	},
 	{
 		rationale: "only go/ssa/ssautil may connect go/ssa and go/packages",
-		from:      []string{"golang.org/x/tools/go/ssa"},
-		deny:      []string{"golang.org/x/tools/go/packages"},
+		from:      []string{"github.com/greatliontech/go-x-tools/go/ssa"},
+		deny:      []string{"github.com/greatliontech/go-x-tools/go/packages"},
 	},
 	{
 		rationale: "low-level type utilities must not depend on higher layers",
 		// (Mostly implied by the cmd rule above, since these
 		// packages are all vendored into cmd.)
 		from: []string{
-			"golang.org/x/tools/go/types/objectpath",
-			"golang.org/x/tools/go/types/typeutil",
-			"golang.org/x/tools/internal/typeparams",
-			"golang.org/x/tools/internal/typesinternal",
+			"github.com/greatliontech/go-x-tools/go/types/objectpath",
+			"github.com/greatliontech/go-x-tools/go/types/typeutil",
+			"github.com/greatliontech/go-x-tools/internal/typeparams",
+			"github.com/greatliontech/go-x-tools/internal/typesinternal",
 		},
 		deny: []string{
-			"golang.org/x/tools/go/analysis",
-			"golang.org/x/tools/go/packages",
-			"golang.org/x/tools/go/ssa",
+			"github.com/greatliontech/go-x-tools/go/analysis",
+			"github.com/greatliontech/go-x-tools/go/packages",
+			"github.com/greatliontech/go-x-tools/go/ssa",
 		},
 	},
 	{
 		rationale: "only test helpers may depend on test helpers",
-		from:      []string{"golang.org/x/tools/..."},
+		from:      []string{"github.com/greatliontech/go-x-tools/..."},
 		except: []string{
-			"golang.org/x/tools/go/analysis/analysistest",
-			"golang.org/x/tools/go/packages/packagestest",
-			"golang.org/x/tools/internal/packagestest",
-			"golang.org/x/tools/internal/testfiles",
+			"github.com/greatliontech/go-x-tools/go/analysis/analysistest",
+			"github.com/greatliontech/go-x-tools/go/packages/packagestest",
+			"github.com/greatliontech/go-x-tools/internal/packagestest",
+			"github.com/greatliontech/go-x-tools/internal/testfiles",
 		},
 		deny: []string{
-			"golang.org/x/tools/go/analysis/analysistest",
-			"golang.org/x/tools/go/packages/packagestest",
-			"golang.org/x/tools/internal/diff/difftest",
-			"golang.org/x/tools/internal/event/export/eventtest",
-			"golang.org/x/tools/internal/jsonrpc2/stack/stacktest",
-			"golang.org/x/tools/internal/packagestest",
-			"golang.org/x/tools/internal/testenv",
-			"golang.org/x/tools/internal/testfiles",
+			"github.com/greatliontech/go-x-tools/go/analysis/analysistest",
+			"github.com/greatliontech/go-x-tools/go/packages/packagestest",
+			"github.com/greatliontech/go-x-tools/internal/diff/difftest",
+			"github.com/greatliontech/go-x-tools/internal/event/export/eventtest",
+			"github.com/greatliontech/go-x-tools/internal/jsonrpc2/stack/stacktest",
+			"github.com/greatliontech/go-x-tools/internal/packagestest",
+			"github.com/greatliontech/go-x-tools/internal/testenv",
+			"github.com/greatliontech/go-x-tools/internal/testfiles",
 		},
 	},
 }
@@ -147,7 +147,7 @@ func TestDeps(t *testing.T) {
 	// expand expands dir/... import path patterns within this module.
 	expand := func(patterns []string) []string {
 		if slices.ContainsFunc(patterns, func(s string) bool { return strings.Contains(s, "...") }) {
-			const filter = `{{if and .Module (eq .Module.Path "golang.org/x/tools")}}{{.ImportPath}}{{end}}`
+			const filter = `{{if and .Module (eq .Module.Path "github.com/greatliontech/go-x-tools")}}{{.ImportPath}}{{end}}`
 			pkgs := goList(append([]string{"-f", filter}, patterns...)...)
 			return slices.DeleteFunc(pkgs, func(pkg string) bool { return pkg == "" })
 		}
@@ -222,7 +222,7 @@ func TestDeps(t *testing.T) {
 			}
 			if rule.allow != nil {
 				for dep := range imports {
-					if strings.HasPrefix(dep, "golang.org/x/tools/") && !slices.Contains(rule.allow, dep) {
+					if strings.HasPrefix(dep, "github.com/greatliontech/go-x-tools/") && !slices.Contains(rule.allow, dep) {
 						if path := reaches(from, dep); path != nil {
 							t.Errorf("%s has disallowed dependency on %s (%s):\n\t%s",
 								from, dep, rule.rationale, strings.Join(path, " ->\n\t"))

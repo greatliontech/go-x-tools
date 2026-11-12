@@ -3,9 +3,9 @@
 // license that can be found in the LICENSE file.
 
 // Package typeindex defines an analyzer that provides a
-// [golang.org/x/tools/internal/typesinternal/typeindex.Index].
+// [github.com/greatliontech/go-x-tools/internal/typesinternal/typeindex.Index].
 //
-// Like [golang.org/x/tools/go/analysis/passes/inspect], it is
+// Like [github.com/greatliontech/go-x-tools/go/analysis/passes/inspect], it is
 // intended to be used as a helper by other analyzers; it reports no
 // diagnostics of its own.
 package typeindex
@@ -13,10 +13,10 @@ package typeindex
 import (
 	"reflect"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/inspect"
-	"golang.org/x/tools/go/ast/inspector"
-	"golang.org/x/tools/internal/typesinternal/typeindex"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/inspect"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal/typeindex"
 )
 
 var Analyzer = &analysis.Analyzer{

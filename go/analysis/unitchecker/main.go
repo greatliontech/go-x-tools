@@ -5,7 +5,7 @@
 //go:build ignore
 
 // This file provides an example command for static checkers
-// conforming to the golang.org/x/tools/go/analysis API.
+// conforming to the github.com/greatliontech/go-x-tools/go/analysis API.
 // It serves as a model for the behavior of the cmd/vet tool in $GOROOT.
 // Being based on the unitchecker driver, it must be run by go vet:
 //
@@ -16,8 +16,8 @@
 package main
 
 import (
-	"golang.org/x/tools/go/analysis/suite/vet"
-	"golang.org/x/tools/go/analysis/unitchecker"
+	"github.com/greatliontech/go-x-tools/go/analysis/suite/vet"
+	"github.com/greatliontech/go-x-tools/go/analysis/unitchecker"
 )
 
 func main() {

@@ -11,7 +11,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"golang.org/x/tools/internal/graph"
+	"github.com/greatliontech/go-x-tools/internal/graph"
 )
 
 // Dot contains options for generating a Graphviz Dot graph from a

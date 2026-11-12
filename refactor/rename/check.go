@@ -12,10 +12,10 @@ import (
 	"go/token"
 	"go/types"
 
-	"golang.org/x/tools/go/loader"
-	"golang.org/x/tools/internal/typeparams"
-	"golang.org/x/tools/internal/typesinternal"
-	"golang.org/x/tools/refactor/satisfy"
+	"github.com/greatliontech/go-x-tools/go/loader"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/refactor/satisfy"
 )
 
 // errorf reports an error (e.g. conflict) and prevents file modification.

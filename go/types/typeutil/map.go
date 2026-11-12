@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"go/types"
 
-	"golang.org/x/tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
 )
 
 // Map is a hash-table-based mapping from types (types.Type) to

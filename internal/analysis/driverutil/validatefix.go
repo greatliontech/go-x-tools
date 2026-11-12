@@ -12,7 +12,7 @@ import (
 	"go/token"
 	"slices"
 
-	"golang.org/x/tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis"
 )
 
 // ValidateFixes validates the set of fixes for a single diagnostic.

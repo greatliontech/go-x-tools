@@ -30,12 +30,12 @@ import (
 	"strconv"
 	"strings"
 
-	goastutil "golang.org/x/tools/go/ast/astutil"
-	"golang.org/x/tools/go/ast/inspector"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/astutil"
-	"golang.org/x/tools/internal/typeparams"
+	goastutil "github.com/greatliontech/go-x-tools/go/ast/astutil"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/astutil"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
 )
 
 // TODO(adonovan):

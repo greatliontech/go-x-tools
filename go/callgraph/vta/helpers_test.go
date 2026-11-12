@@ -14,12 +14,12 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/callgraph"
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/go/ssa/ssautil"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/go/callgraph"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/go/ssa/ssautil"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 
-	"golang.org/x/tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/go/ssa"
 )
 
 // want extracts the contents of the first comment

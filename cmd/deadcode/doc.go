@@ -94,7 +94,7 @@ by package:
 The -whylive=function flag explain why the named function is not dead
 by showing an arbitrary shortest path to it from one of the main functions.
 (To enumerate the functions in a program, or for more sophisticated
-call graph queries, use golang.org/x/tools/cmd/callgraph.)
+call graph queries, use github.com/greatliontech/go-x-tools/cmd/callgraph.)
 
 Fully static call paths are preferred over paths involving dynamic
 edges, even if longer. Paths starting from a non-test package are
@@ -108,12 +108,12 @@ The default format shows, for each edge in the path, whether the call
 is static or dynamic, and its source line number. For example:
 
 	$ deadcode -whylive=bytes.Buffer.String -test ./cmd/deadcode/...
-	                 golang.org/x/tools/cmd/deadcode.main
-	static@L0117 --> golang.org/x/tools/go/packages.Load
-	static@L0262 --> golang.org/x/tools/go/packages.defaultDriver
-	static@L0305 --> golang.org/x/tools/go/packages.goListDriver
-	static@L0153 --> golang.org/x/tools/go/packages.goListDriver$1
-	static@L0154 --> golang.org/x/tools/go/internal/packagesdriver.GetSizesForArgsGolist
+	                 github.com/greatliontech/go-x-tools/cmd/deadcode.main
+	static@L0117 --> github.com/greatliontech/go-x-tools/go/packages.Load
+	static@L0262 --> github.com/greatliontech/go-x-tools/go/packages.defaultDriver
+	static@L0305 --> github.com/greatliontech/go-x-tools/go/packages.goListDriver
+	static@L0153 --> github.com/greatliontech/go-x-tools/go/packages.goListDriver$1
+	static@L0154 --> github.com/greatliontech/go-x-tools/go/internal/packagesdriver.GetSizesForArgsGolist
 	static@L0044 --> bytes.Buffer.String
 
 # JSON schema

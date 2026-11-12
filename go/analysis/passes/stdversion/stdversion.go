@@ -12,12 +12,12 @@ import (
 	"go/types"
 	"slices"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/analysis/passes/inspect"
-	"golang.org/x/tools/go/ast/inspector"
-	"golang.org/x/tools/internal/stdlib"
-	"golang.org/x/tools/internal/typesinternal"
-	"golang.org/x/tools/internal/versions"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/inspect"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/internal/stdlib"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/internal/versions"
 )
 
 const Doc = `report uses of too-new standard library symbols

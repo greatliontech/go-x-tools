@@ -5,12 +5,12 @@
 // The modernize command suggests (or, with -fix, applies) fixes that
 // clarify Go code by using more modern features.
 //
-// See [golang.org/x/tools/go/analysis/passes/modernize] for details.
+// See [github.com/greatliontech/go-x-tools/go/analysis/passes/modernize] for details.
 package main
 
 import (
-	"golang.org/x/tools/go/analysis/multichecker"
-	"golang.org/x/tools/go/analysis/passes/modernize"
+	"github.com/greatliontech/go-x-tools/go/analysis/multichecker"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/modernize"
 )
 
 func main() { multichecker.Main(modernize.Suite...) }

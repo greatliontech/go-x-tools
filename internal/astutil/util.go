@@ -11,8 +11,8 @@ import (
 	"go/token"
 	"strings"
 
-	"golang.org/x/tools/go/ast/inspector"
-	"golang.org/x/tools/internal/cursorutil"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/internal/cursorutil"
 )
 
 // NodeContains reports whether the Pos/End range of node n encloses

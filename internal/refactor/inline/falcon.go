@@ -17,8 +17,8 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/tools/go/types/typeutil"
-	"golang.org/x/tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/go/types/typeutil"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
 )
 
 // falconResult is the result of the analysis of the callee.

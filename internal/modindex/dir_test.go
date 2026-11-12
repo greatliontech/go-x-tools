@@ -12,7 +12,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 
-	. "golang.org/x/tools/internal/modindex"
+	. "github.com/greatliontech/go-x-tools/internal/modindex"
 )
 
 type id struct {

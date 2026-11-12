@@ -7,8 +7,8 @@
 package main
 
 import (
-	"golang.org/x/tools/go/analysis/passes/hostport"
-	"golang.org/x/tools/go/analysis/singlechecker"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/hostport"
+	"github.com/greatliontech/go-x-tools/go/analysis/singlechecker"
 )
 
 func main() { singlechecker.Main(hostport.Analyzer) }

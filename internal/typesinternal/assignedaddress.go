@@ -9,8 +9,8 @@ import (
 	"go/token"
 	"go/types"
 
-	"golang.org/x/tools/go/ast/edge"
-	"golang.org/x/tools/go/ast/inspector"
+	"github.com/greatliontech/go-x-tools/go/ast/edge"
+	"github.com/greatliontech/go-x-tools/go/ast/inspector"
 )
 
 // IsAssignedOrAddressTaken reports whether the expression cur denotes a

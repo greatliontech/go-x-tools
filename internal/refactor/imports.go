@@ -13,7 +13,7 @@ import (
 	pathpkg "path"
 	"strconv"
 
-	"golang.org/x/tools/internal/packagepath"
+	"github.com/greatliontech/go-x-tools/internal/packagepath"
 )
 
 // AddImport returns the prefix (either "pkg." or "") that should be

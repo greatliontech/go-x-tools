@@ -7,8 +7,8 @@ package modernize
 import (
 	"strings"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/internal/analysis/analyzerutil"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/internal/analysis/analyzerutil"
 )
 
 var importCommentAnalyzer = &analysis.Analyzer{

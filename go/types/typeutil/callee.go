@@ -8,7 +8,7 @@ import (
 	"go/ast"
 	"go/types"
 
-	"golang.org/x/tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 // Callee returns the named target of a function call, if any:

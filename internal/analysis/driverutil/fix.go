@@ -24,10 +24,10 @@ import (
 	"sort"
 	"strconv"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/go/ast/astutil"
-	"golang.org/x/tools/internal/astutil/free"
-	"golang.org/x/tools/internal/diff"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/go/ast/astutil"
+	"github.com/greatliontech/go-x-tools/internal/astutil/free"
+	"github.com/greatliontech/go-x-tools/internal/diff"
 )
 
 // FixAction abstracts a checker action (running one analyzer on one

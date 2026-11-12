@@ -12,8 +12,8 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/callgraph/cha"
-	"golang.org/x/tools/go/ssa/ssautil"
+	"github.com/greatliontech/go-x-tools/go/callgraph/cha"
+	"github.com/greatliontech/go-x-tools/go/ssa/ssautil"
 )
 
 func TestNodeInterface(t *testing.T) {

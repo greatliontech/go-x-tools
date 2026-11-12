@@ -13,8 +13,8 @@ import (
 	"go/types"
 	"testing"
 
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/go/ssa"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 // generic

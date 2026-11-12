@@ -7,10 +7,10 @@ package otel
 import (
 	"slices"
 
-	"golang.org/x/tools/internal/event"
-	"golang.org/x/tools/internal/event/core"
-	"golang.org/x/tools/internal/event/export"
-	"golang.org/x/tools/internal/event/keys"
+	"github.com/greatliontech/go-x-tools/internal/event"
+	"github.com/greatliontech/go-x-tools/internal/event/core"
+	"github.com/greatliontech/go-x-tools/internal/event/export"
+	"github.com/greatliontech/go-x-tools/internal/event/keys"
 )
 
 // exportTraces sends traces to the OTLP endpoint.
@@ -19,7 +19,7 @@ func (e *Exporter) exportTraces(spans []otlpSpan) error {
 		ResourceSpans: []otlpResourceSpans{{
 			Resource: e.resource,
 			ScopeSpans: []otlpScopeSpans{{
-				Scope: otlpScope{Name: "golang.org/x/tools"},
+				Scope: otlpScope{Name: "github.com/greatliontech/go-x-tools"},
 				Spans: spans,
 			}},
 		}},

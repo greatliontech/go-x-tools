@@ -4,13 +4,13 @@
 
 //go:build ignore
 
-// The errorsas command applies the golang.org/x/tools/go/analysis/passes/errorsas
+// The errorsas command applies the github.com/greatliontech/go-x-tools/go/analysis/passes/errorsas
 // analysis to the specified packages of Go source code.
 package main
 
 import (
-	"golang.org/x/tools/go/analysis/passes/errorsas"
-	"golang.org/x/tools/go/analysis/singlechecker"
+	"github.com/greatliontech/go-x-tools/go/analysis/passes/errorsas"
+	"github.com/greatliontech/go-x-tools/go/analysis/singlechecker"
 )
 
 func main() { singlechecker.Main(errorsas.Analyzer) }

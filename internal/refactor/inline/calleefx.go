@@ -12,7 +12,7 @@ import (
 	"go/types"
 	"slices"
 
-	"golang.org/x/tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 const (

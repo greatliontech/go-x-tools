@@ -18,8 +18,8 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/tools/go/analysis"
-	"golang.org/x/tools/internal/analysis/analyzerutil"
+	"github.com/greatliontech/go-x-tools/go/analysis"
+	"github.com/greatliontech/go-x-tools/internal/analysis/analyzerutil"
 )
 
 const Doc = "report mismatches between assembly files and Go declarations"

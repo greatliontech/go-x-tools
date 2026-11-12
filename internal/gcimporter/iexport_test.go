@@ -23,9 +23,9 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/internal/gcimporter"
-	"golang.org/x/tools/internal/testenv"
+	"github.com/greatliontech/go-x-tools/go/packages"
+	"github.com/greatliontech/go-x-tools/internal/gcimporter"
+	"github.com/greatliontech/go-x-tools/internal/testenv"
 )
 
 func iexport(fset *token.FileSet, version int, pkg *types.Package) ([]byte, error) {

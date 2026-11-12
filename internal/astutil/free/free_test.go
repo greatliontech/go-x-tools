@@ -14,7 +14,7 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/tools/internal/astutil/free"
+	"github.com/greatliontech/go-x-tools/internal/astutil/free"
 )
 
 func TestNames(t *testing.T) {

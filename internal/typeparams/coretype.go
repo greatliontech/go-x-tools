@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"go/types"
 
-	"golang.org/x/tools/internal/moreiters"
+	"github.com/greatliontech/go-x-tools/internal/moreiters"
 )
 
 // CoreType returns the core type of T or nil if T does not have a core type.

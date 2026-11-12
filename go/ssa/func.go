@@ -17,8 +17,8 @@ import (
 	"os"
 	"strings"
 
-	"golang.org/x/tools/internal/typeparams"
-	"golang.org/x/tools/internal/typesinternal"
+	"github.com/greatliontech/go-x-tools/internal/typeparams"
+	"github.com/greatliontech/go-x-tools/internal/typesinternal"
 )
 
 // Like ObjectOf, but panics instead of returning nil.
