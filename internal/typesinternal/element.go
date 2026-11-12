@@ -14,18 +14,21 @@ import (
 // type constructors; in addition, for each named type N, the type *N
 // is added to the result as it may have additional methods.
 //
-// The access argument passed to f indicates whether the type is
-// inaccessible to reflection (for example, intermediate tuple types
-// or underlying types of named types).
+// The access argument passed to f is true when the type is accessible through
+// reflection. Intermediate tuple types and underlying types of named types
+// receive false.
 //
 // The result of f indicates whether the caller has seen this type
 // already, so we can prune the traversal.
+// Aliases are normalized before calling f: a visited set using types.Identical
+// otherwise records the alias and prunes its identical target before descending.
 //
 // methodSetOf abstracts (*typeutil.MethodSetCache).MethodSet,
 // avoiding an import cycle.
 func ForEachElement(methodSetOf func(types.Type) *types.MethodSet, T types.Type, f func(T types.Type, access bool) bool) {
 	var visit func(T types.Type, access bool)
 	visit = func(T types.Type, access bool) {
+		T = types.Unalias(T)
 		if f(T, access) {
 			return // duplicate; prune descent
 		}
@@ -67,9 +70,6 @@ func ForEachElement(methodSetOf func(types.Type) *types.MethodSet, T types.Type,
 		}
 
 		switch T := T.(type) {
-		case *types.Alias:
-			visit(types.Unalias(T), access) // emulates the pre-Alias behavior
-
 		case *types.Basic:
 			// nop
 

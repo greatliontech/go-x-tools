@@ -179,6 +179,22 @@ panic: oops
 FAIL    golang.org/x/tools/internal/jsonrpc2    0.252s
 FAIL
 `,
+	}, {
+		name: `hyphenated_import_path`,
+		input: `
+goroutine 7 [running]:
+example.com/org-name/repo-name/pkg-sub.(*Conn).Run(0xc000204330)
+	/work/repo/pkg-sub/conn.go:42 +0x1a
+created by example.com/org-name/repo-name/pkg-sub_test.run
+	/work/repo/pkg-sub/conn_test.go:19 +0x3c
+`,
+		expect: `
+[running]: $7
+/work/repo/pkg-sub/conn.go:42:      (*Conn).Run
+/work/repo/pkg-sub/conn_test.go:19: run
+
+1 goroutines, 1 unique
+`,
 	}} {
 		t.Run(test.name, func(t *testing.T) {
 			buf := &bytes.Buffer{}

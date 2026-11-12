@@ -16,7 +16,7 @@ var (
 	reGoroutine = regexp.MustCompile(`^\s*goroutine (\d+) \[([^\]]*)\]:\s*$`)
 	reCall      = regexp.MustCompile(`^\s*` +
 		`(created by )?` + //marker
-		`(([\w/.]+/)?[\w]+)\.` + //package
+		`(([\w/.-]+/)?[\w-]+)\.` + //package
 		`(\(([^:.)]*)\)\.)?` + //optional type
 		`([\w\.]+)` + //function
 		`(\(.*\))?` + // args

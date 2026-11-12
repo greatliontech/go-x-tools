@@ -150,8 +150,8 @@ type Hf64 = H[float64]
 		// Assert than all expected (and no unexpected) elements were found.
 		fail := false
 		for _, typstr := range test.want {
-			found := got[typstr]
 			typstr, unwanted := strings.CutPrefix(typstr, "!")
+			found := got[typstr]
 			if found && unwanted {
 				fail = true
 				t.Errorf("ForEachElement(%s): unwanted element %q", T, typstr)
@@ -162,6 +162,43 @@ type Hf64 = H[float64]
 		}
 		if fail {
 			t.Logf("got elements:\n%s", strings.Join(slices.Sorted(maps.Keys(got)), "\n"))
+		}
+	}
+}
+
+func TestForEachElementNormalizesAliasesBeforeVisited(t *testing.T) {
+	fset := token.NewFileSet()
+	f, err := parser.ParseFile(fset, "aliases.go", elementSrc, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pkg, err := new(types.Config).Check("p", fset, []*ast.File{f}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var methods typeutil.MethodSetCache
+	for _, order := range [][]string{{"C", "T", "B", "G"}, {"T", "C", "B", "G"}} {
+		var seen typeutil.Map
+		got := make(map[string]bool)
+		for _, name := range order {
+			typesinternal.ForEachElement(methods.MethodSet, pkg.Scope().Lookup(name).Type(), func(typ types.Type, access bool) bool {
+				if _, alias := typ.(*types.Alias); alias {
+					t.Errorf("callback received alias %s before normalization", typ)
+				}
+				if seen.At(typ) != nil {
+					return true
+				}
+				seen.Set(typ, true)
+				if access {
+					got[types.TypeString(typ, func(*types.Package) string { return "" })] = true
+				}
+				return false
+			})
+		}
+		for _, want := range []string{"T", "*T", "int", "uint", "complex128", "chan int", "bool", "*U", "uint32"} {
+			if !got[want] {
+				t.Errorf("order %v: missing %s; visited %v", order, want, slices.Sorted(maps.Keys(got)))
+			}
 		}
 	}
 }
