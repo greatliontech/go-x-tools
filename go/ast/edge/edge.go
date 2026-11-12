@@ -20,27 +20,28 @@ func (k Kind) String() string {
 	if k == Invalid {
 		return "<invalid>"
 	}
-	info := fieldInfos[k]
+	info := k.info()
 	return fmt.Sprintf("%v.%s", info.nodeType.Elem().Name(), info.name)
 }
 
 // NodeType returns the pointer-to-struct type of the ast.Node implementation.
-func (k Kind) NodeType() reflect.Type { return fieldInfos[k].nodeType }
+func (k Kind) NodeType() reflect.Type { return k.info().nodeType }
 
 // FieldName returns the name of the field.
-func (k Kind) FieldName() string { return fieldInfos[k].name }
+func (k Kind) FieldName() string { return k.info().name }
 
 // FieldType returns the declared type of the field.
-func (k Kind) FieldType() reflect.Type { return fieldInfos[k].fieldType }
+func (k Kind) FieldType() reflect.Type { return k.info().fieldType }
 
 // Get returns the direct child of n identified by (k, idx).
 // n's type must match k.NodeType().
 // idx must be a valid slice index, or -1 for a non-slice.
 func (k Kind) Get(n ast.Node, idx int) ast.Node {
-	if k.NodeType() != reflect.TypeOf(n) {
+	info := k.info()
+	if info.nodeType != reflect.TypeOf(n) {
 		panic(fmt.Sprintf("%v.Get(%T): invalid node type", k, n))
 	}
-	v := reflect.ValueOf(n).Elem().Field(fieldInfos[k].index)
+	v := reflect.ValueOf(n).Elem().Field(info.index)
 
 	if v.Kind() == reflect.Slice {
 		v = v.Index(idx) // asserts valid idx
@@ -182,7 +183,8 @@ type fieldInfo struct {
 }
 
 func info[N ast.Node](fieldName string) fieldInfo {
-	nodePtrType := reflect.TypeFor[N]()
+	var zero N
+	nodePtrType := reflect.TypeOf(zero)
 	f, ok := nodePtrType.Elem().FieldByName(fieldName)
 	if !ok {
 		panic(fieldName)
@@ -190,110 +192,219 @@ func info[N ast.Node](fieldName string) fieldInfo {
 	return fieldInfo{nodePtrType, fieldName, f.Index[0], f.Type}
 }
 
-var fieldInfos = [...]fieldInfo{
-	Invalid:               {},
-	ArrayType_Elt:         info[*ast.ArrayType]("Elt"),
-	ArrayType_Len:         info[*ast.ArrayType]("Len"),
-	AssignStmt_Lhs:        info[*ast.AssignStmt]("Lhs"),
-	AssignStmt_Rhs:        info[*ast.AssignStmt]("Rhs"),
-	BinaryExpr_X:          info[*ast.BinaryExpr]("X"),
-	BinaryExpr_Y:          info[*ast.BinaryExpr]("Y"),
-	BlockStmt_List:        info[*ast.BlockStmt]("List"),
-	BranchStmt_Label:      info[*ast.BranchStmt]("Label"),
-	CallExpr_Args:         info[*ast.CallExpr]("Args"),
-	CallExpr_Fun:          info[*ast.CallExpr]("Fun"),
-	CaseClause_Body:       info[*ast.CaseClause]("Body"),
-	CaseClause_List:       info[*ast.CaseClause]("List"),
-	ChanType_Value:        info[*ast.ChanType]("Value"),
-	CommClause_Body:       info[*ast.CommClause]("Body"),
-	CommClause_Comm:       info[*ast.CommClause]("Comm"),
-	CommentGroup_List:     info[*ast.CommentGroup]("List"),
-	CompositeLit_Elts:     info[*ast.CompositeLit]("Elts"),
-	CompositeLit_Type:     info[*ast.CompositeLit]("Type"),
-	DeclStmt_Decl:         info[*ast.DeclStmt]("Decl"),
-	DeferStmt_Call:        info[*ast.DeferStmt]("Call"),
-	Ellipsis_Elt:          info[*ast.Ellipsis]("Elt"),
-	ExprStmt_X:            info[*ast.ExprStmt]("X"),
-	FieldList_List:        info[*ast.FieldList]("List"),
-	Field_Comment:         info[*ast.Field]("Comment"),
-	Field_Doc:             info[*ast.Field]("Doc"),
-	Field_Names:           info[*ast.Field]("Names"),
-	Field_Tag:             info[*ast.Field]("Tag"),
-	Field_Type:            info[*ast.Field]("Type"),
-	File_Decls:            info[*ast.File]("Decls"),
-	File_Doc:              info[*ast.File]("Doc"),
-	File_Name:             info[*ast.File]("Name"),
-	ForStmt_Body:          info[*ast.ForStmt]("Body"),
-	ForStmt_Cond:          info[*ast.ForStmt]("Cond"),
-	ForStmt_Init:          info[*ast.ForStmt]("Init"),
-	ForStmt_Post:          info[*ast.ForStmt]("Post"),
-	FuncDecl_Body:         info[*ast.FuncDecl]("Body"),
-	FuncDecl_Doc:          info[*ast.FuncDecl]("Doc"),
-	FuncDecl_Name:         info[*ast.FuncDecl]("Name"),
-	FuncDecl_Recv:         info[*ast.FuncDecl]("Recv"),
-	FuncDecl_Type:         info[*ast.FuncDecl]("Type"),
-	FuncLit_Body:          info[*ast.FuncLit]("Body"),
-	FuncLit_Type:          info[*ast.FuncLit]("Type"),
-	FuncType_Params:       info[*ast.FuncType]("Params"),
-	FuncType_Results:      info[*ast.FuncType]("Results"),
-	FuncType_TypeParams:   info[*ast.FuncType]("TypeParams"),
-	GenDecl_Doc:           info[*ast.GenDecl]("Doc"),
-	GenDecl_Specs:         info[*ast.GenDecl]("Specs"),
-	GoStmt_Call:           info[*ast.GoStmt]("Call"),
-	IfStmt_Body:           info[*ast.IfStmt]("Body"),
-	IfStmt_Cond:           info[*ast.IfStmt]("Cond"),
-	IfStmt_Else:           info[*ast.IfStmt]("Else"),
-	IfStmt_Init:           info[*ast.IfStmt]("Init"),
-	ImportSpec_Comment:    info[*ast.ImportSpec]("Comment"),
-	ImportSpec_Doc:        info[*ast.ImportSpec]("Doc"),
-	ImportSpec_Name:       info[*ast.ImportSpec]("Name"),
-	ImportSpec_Path:       info[*ast.ImportSpec]("Path"),
-	IncDecStmt_X:          info[*ast.IncDecStmt]("X"),
-	IndexExpr_Index:       info[*ast.IndexExpr]("Index"),
-	IndexExpr_X:           info[*ast.IndexExpr]("X"),
-	IndexListExpr_Indices: info[*ast.IndexListExpr]("Indices"),
-	IndexListExpr_X:       info[*ast.IndexListExpr]("X"),
-	InterfaceType_Methods: info[*ast.InterfaceType]("Methods"),
-	KeyValueExpr_Key:      info[*ast.KeyValueExpr]("Key"),
-	KeyValueExpr_Value:    info[*ast.KeyValueExpr]("Value"),
-	LabeledStmt_Label:     info[*ast.LabeledStmt]("Label"),
-	LabeledStmt_Stmt:      info[*ast.LabeledStmt]("Stmt"),
-	MapType_Key:           info[*ast.MapType]("Key"),
-	MapType_Value:         info[*ast.MapType]("Value"),
-	ParenExpr_X:           info[*ast.ParenExpr]("X"),
-	RangeStmt_Body:        info[*ast.RangeStmt]("Body"),
-	RangeStmt_Key:         info[*ast.RangeStmt]("Key"),
-	RangeStmt_Value:       info[*ast.RangeStmt]("Value"),
-	RangeStmt_X:           info[*ast.RangeStmt]("X"),
-	ReturnStmt_Results:    info[*ast.ReturnStmt]("Results"),
-	SelectStmt_Body:       info[*ast.SelectStmt]("Body"),
-	SelectorExpr_Sel:      info[*ast.SelectorExpr]("Sel"),
-	SelectorExpr_X:        info[*ast.SelectorExpr]("X"),
-	SendStmt_Chan:         info[*ast.SendStmt]("Chan"),
-	SendStmt_Value:        info[*ast.SendStmt]("Value"),
-	SliceExpr_High:        info[*ast.SliceExpr]("High"),
-	SliceExpr_Low:         info[*ast.SliceExpr]("Low"),
-	SliceExpr_Max:         info[*ast.SliceExpr]("Max"),
-	SliceExpr_X:           info[*ast.SliceExpr]("X"),
-	StarExpr_X:            info[*ast.StarExpr]("X"),
-	StructType_Fields:     info[*ast.StructType]("Fields"),
-	SwitchStmt_Body:       info[*ast.SwitchStmt]("Body"),
-	SwitchStmt_Init:       info[*ast.SwitchStmt]("Init"),
-	SwitchStmt_Tag:        info[*ast.SwitchStmt]("Tag"),
-	TypeAssertExpr_Type:   info[*ast.TypeAssertExpr]("Type"),
-	TypeAssertExpr_X:      info[*ast.TypeAssertExpr]("X"),
-	TypeSpec_Comment:      info[*ast.TypeSpec]("Comment"),
-	TypeSpec_Doc:          info[*ast.TypeSpec]("Doc"),
-	TypeSpec_Name:         info[*ast.TypeSpec]("Name"),
-	TypeSpec_Type:         info[*ast.TypeSpec]("Type"),
-	TypeSpec_TypeParams:   info[*ast.TypeSpec]("TypeParams"),
-	TypeSwitchStmt_Assign: info[*ast.TypeSwitchStmt]("Assign"),
-	TypeSwitchStmt_Body:   info[*ast.TypeSwitchStmt]("Body"),
-	TypeSwitchStmt_Init:   info[*ast.TypeSwitchStmt]("Init"),
-	UnaryExpr_X:           info[*ast.UnaryExpr]("X"),
-	ValueSpec_Comment:     info[*ast.ValueSpec]("Comment"),
-	ValueSpec_Doc:         info[*ast.ValueSpec]("Doc"),
-	ValueSpec_Names:       info[*ast.ValueSpec]("Names"),
-	ValueSpec_Type:        info[*ast.ValueSpec]("Type"),
-	ValueSpec_Values:      info[*ast.ValueSpec]("Values"),
+func (k Kind) info() fieldInfo {
+	switch k {
+	case Invalid:
+		return fieldInfo{}
+	case ArrayType_Elt:
+		return info[*ast.ArrayType]("Elt")
+	case ArrayType_Len:
+		return info[*ast.ArrayType]("Len")
+	case AssignStmt_Lhs:
+		return info[*ast.AssignStmt]("Lhs")
+	case AssignStmt_Rhs:
+		return info[*ast.AssignStmt]("Rhs")
+	case BinaryExpr_X:
+		return info[*ast.BinaryExpr]("X")
+	case BinaryExpr_Y:
+		return info[*ast.BinaryExpr]("Y")
+	case BlockStmt_List:
+		return info[*ast.BlockStmt]("List")
+	case BranchStmt_Label:
+		return info[*ast.BranchStmt]("Label")
+	case CallExpr_Args:
+		return info[*ast.CallExpr]("Args")
+	case CallExpr_Fun:
+		return info[*ast.CallExpr]("Fun")
+	case CaseClause_Body:
+		return info[*ast.CaseClause]("Body")
+	case CaseClause_List:
+		return info[*ast.CaseClause]("List")
+	case ChanType_Value:
+		return info[*ast.ChanType]("Value")
+	case CommClause_Body:
+		return info[*ast.CommClause]("Body")
+	case CommClause_Comm:
+		return info[*ast.CommClause]("Comm")
+	case CommentGroup_List:
+		return info[*ast.CommentGroup]("List")
+	case CompositeLit_Elts:
+		return info[*ast.CompositeLit]("Elts")
+	case CompositeLit_Type:
+		return info[*ast.CompositeLit]("Type")
+	case DeclStmt_Decl:
+		return info[*ast.DeclStmt]("Decl")
+	case DeferStmt_Call:
+		return info[*ast.DeferStmt]("Call")
+	case Ellipsis_Elt:
+		return info[*ast.Ellipsis]("Elt")
+	case ExprStmt_X:
+		return info[*ast.ExprStmt]("X")
+	case FieldList_List:
+		return info[*ast.FieldList]("List")
+	case Field_Comment:
+		return info[*ast.Field]("Comment")
+	case Field_Doc:
+		return info[*ast.Field]("Doc")
+	case Field_Names:
+		return info[*ast.Field]("Names")
+	case Field_Tag:
+		return info[*ast.Field]("Tag")
+	case Field_Type:
+		return info[*ast.Field]("Type")
+	case File_Decls:
+		return info[*ast.File]("Decls")
+	case File_Doc:
+		return info[*ast.File]("Doc")
+	case File_Name:
+		return info[*ast.File]("Name")
+	case ForStmt_Body:
+		return info[*ast.ForStmt]("Body")
+	case ForStmt_Cond:
+		return info[*ast.ForStmt]("Cond")
+	case ForStmt_Init:
+		return info[*ast.ForStmt]("Init")
+	case ForStmt_Post:
+		return info[*ast.ForStmt]("Post")
+	case FuncDecl_Body:
+		return info[*ast.FuncDecl]("Body")
+	case FuncDecl_Doc:
+		return info[*ast.FuncDecl]("Doc")
+	case FuncDecl_Name:
+		return info[*ast.FuncDecl]("Name")
+	case FuncDecl_Recv:
+		return info[*ast.FuncDecl]("Recv")
+	case FuncDecl_Type:
+		return info[*ast.FuncDecl]("Type")
+	case FuncLit_Body:
+		return info[*ast.FuncLit]("Body")
+	case FuncLit_Type:
+		return info[*ast.FuncLit]("Type")
+	case FuncType_Params:
+		return info[*ast.FuncType]("Params")
+	case FuncType_Results:
+		return info[*ast.FuncType]("Results")
+	case FuncType_TypeParams:
+		return info[*ast.FuncType]("TypeParams")
+	case GenDecl_Doc:
+		return info[*ast.GenDecl]("Doc")
+	case GenDecl_Specs:
+		return info[*ast.GenDecl]("Specs")
+	case GoStmt_Call:
+		return info[*ast.GoStmt]("Call")
+	case IfStmt_Body:
+		return info[*ast.IfStmt]("Body")
+	case IfStmt_Cond:
+		return info[*ast.IfStmt]("Cond")
+	case IfStmt_Else:
+		return info[*ast.IfStmt]("Else")
+	case IfStmt_Init:
+		return info[*ast.IfStmt]("Init")
+	case ImportSpec_Comment:
+		return info[*ast.ImportSpec]("Comment")
+	case ImportSpec_Doc:
+		return info[*ast.ImportSpec]("Doc")
+	case ImportSpec_Name:
+		return info[*ast.ImportSpec]("Name")
+	case ImportSpec_Path:
+		return info[*ast.ImportSpec]("Path")
+	case IncDecStmt_X:
+		return info[*ast.IncDecStmt]("X")
+	case IndexExpr_Index:
+		return info[*ast.IndexExpr]("Index")
+	case IndexExpr_X:
+		return info[*ast.IndexExpr]("X")
+	case IndexListExpr_Indices:
+		return info[*ast.IndexListExpr]("Indices")
+	case IndexListExpr_X:
+		return info[*ast.IndexListExpr]("X")
+	case InterfaceType_Methods:
+		return info[*ast.InterfaceType]("Methods")
+	case KeyValueExpr_Key:
+		return info[*ast.KeyValueExpr]("Key")
+	case KeyValueExpr_Value:
+		return info[*ast.KeyValueExpr]("Value")
+	case LabeledStmt_Label:
+		return info[*ast.LabeledStmt]("Label")
+	case LabeledStmt_Stmt:
+		return info[*ast.LabeledStmt]("Stmt")
+	case MapType_Key:
+		return info[*ast.MapType]("Key")
+	case MapType_Value:
+		return info[*ast.MapType]("Value")
+	case ParenExpr_X:
+		return info[*ast.ParenExpr]("X")
+	case RangeStmt_Body:
+		return info[*ast.RangeStmt]("Body")
+	case RangeStmt_Key:
+		return info[*ast.RangeStmt]("Key")
+	case RangeStmt_Value:
+		return info[*ast.RangeStmt]("Value")
+	case RangeStmt_X:
+		return info[*ast.RangeStmt]("X")
+	case ReturnStmt_Results:
+		return info[*ast.ReturnStmt]("Results")
+	case SelectStmt_Body:
+		return info[*ast.SelectStmt]("Body")
+	case SelectorExpr_Sel:
+		return info[*ast.SelectorExpr]("Sel")
+	case SelectorExpr_X:
+		return info[*ast.SelectorExpr]("X")
+	case SendStmt_Chan:
+		return info[*ast.SendStmt]("Chan")
+	case SendStmt_Value:
+		return info[*ast.SendStmt]("Value")
+	case SliceExpr_High:
+		return info[*ast.SliceExpr]("High")
+	case SliceExpr_Low:
+		return info[*ast.SliceExpr]("Low")
+	case SliceExpr_Max:
+		return info[*ast.SliceExpr]("Max")
+	case SliceExpr_X:
+		return info[*ast.SliceExpr]("X")
+	case StarExpr_X:
+		return info[*ast.StarExpr]("X")
+	case StructType_Fields:
+		return info[*ast.StructType]("Fields")
+	case SwitchStmt_Body:
+		return info[*ast.SwitchStmt]("Body")
+	case SwitchStmt_Init:
+		return info[*ast.SwitchStmt]("Init")
+	case SwitchStmt_Tag:
+		return info[*ast.SwitchStmt]("Tag")
+	case TypeAssertExpr_Type:
+		return info[*ast.TypeAssertExpr]("Type")
+	case TypeAssertExpr_X:
+		return info[*ast.TypeAssertExpr]("X")
+	case TypeSpec_Comment:
+		return info[*ast.TypeSpec]("Comment")
+	case TypeSpec_Doc:
+		return info[*ast.TypeSpec]("Doc")
+	case TypeSpec_Name:
+		return info[*ast.TypeSpec]("Name")
+	case TypeSpec_Type:
+		return info[*ast.TypeSpec]("Type")
+	case TypeSpec_TypeParams:
+		return info[*ast.TypeSpec]("TypeParams")
+	case TypeSwitchStmt_Assign:
+		return info[*ast.TypeSwitchStmt]("Assign")
+	case TypeSwitchStmt_Body:
+		return info[*ast.TypeSwitchStmt]("Body")
+	case TypeSwitchStmt_Init:
+		return info[*ast.TypeSwitchStmt]("Init")
+	case UnaryExpr_X:
+		return info[*ast.UnaryExpr]("X")
+	case ValueSpec_Comment:
+		return info[*ast.ValueSpec]("Comment")
+	case ValueSpec_Doc:
+		return info[*ast.ValueSpec]("Doc")
+	case ValueSpec_Names:
+		return info[*ast.ValueSpec]("Names")
+	case ValueSpec_Type:
+		return info[*ast.ValueSpec]("Type")
+	case ValueSpec_Values:
+		return info[*ast.ValueSpec]("Values")
+	default:
+		panic(fmt.Sprintf("invalid Kind: %d", int(k)))
+	}
 }

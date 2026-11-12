@@ -44,3 +44,17 @@ func TestGetPanics(t *testing.T) {
 		t.Fatal("Get did not panic")
 	})
 }
+
+func TestAllKindsHaveValidFieldInfo(t *testing.T) {
+	if got := edge.Invalid.String(); got != "<invalid>" {
+		t.Fatalf("Invalid.String() = %q, want <invalid>", got)
+	}
+	if got := edge.Invalid.NodeType(); got != nil {
+		t.Fatalf("Invalid.NodeType() = %v, want nil", got)
+	}
+	for k := edge.ArrayType_Elt; k <= edge.ValueSpec_Values; k++ {
+		if k.NodeType() == nil || k.FieldName() == "" || k.FieldType() == nil || k.String() == "" {
+			t.Fatalf("Kind(%d) missing metadata: node=%v name=%q type=%v str=%q", k, k.NodeType(), k.FieldName(), k.FieldType(), k.String())
+		}
+	}
+}
