@@ -20,6 +20,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -734,7 +735,7 @@ func newLoader(cfg *Config) *loader {
 	if ld.Config.Logf == nil {
 		// If the GOPACKAGESDEBUG environment variable is set to true,
 		// but the user has not provided a logger, default to log.Printf.
-		if debug {
+		if debug, _ := strconv.ParseBool(os.Getenv("GOPACKAGESDEBUG")); debug {
 			ld.Config.Logf = log.Printf
 		} else {
 			ld.Config.Logf = func(format string, args ...any) {}

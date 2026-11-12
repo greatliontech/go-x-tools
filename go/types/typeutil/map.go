@@ -10,7 +10,6 @@ import (
 	"bytes"
 	"fmt"
 	"go/types"
-	"hash/maphash"
 
 	"golang.org/x/tools/internal/typeparams"
 )
@@ -362,14 +361,16 @@ func (h hasher) hashTypeParam(t *types.TypeParam) uint32 {
 	return 9173 + 3*uint32(t.Index())
 }
 
-var theSeed = maphash.MakeSeed()
-
-// hashTypeName hashes the pointer of tname.
+// hashTypeName hashes tname deterministically without process-random seeds.
 func (hasher) hashTypeName(tname *types.TypeName) uint32 {
-	// Since types.Identical uses == to compare TypeNames,
-	// the Hash function uses maphash.Comparable.
-	hash := maphash.Comparable(theSeed, tname)
-	return uint32(hash ^ (hash >> 32))
+	if tname == nil {
+		return 0
+	}
+	hash := hashString(tname.Name()) ^ (uint32(tname.Pos()) * 16777619)
+	if pkg := tname.Pkg(); pkg != nil {
+		hash ^= hashString(pkg.Path()) * 2166136261
+	}
+	return hash
 }
 
 // shallowHash computes a hash of t without looking at any of its
