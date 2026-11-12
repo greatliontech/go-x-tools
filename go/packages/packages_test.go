@@ -3882,3 +3882,261 @@ func TestLoadCancelDuringParseFilesNoInternalErrorLog(t *testing.T) {
 		t.Fatalf("unexpected internal error logged during context cancellation: %s", logBuf.String())
 	}
 }
+
+func TestLoadConcurrentRangeOverSharedInstantiatedNamedType(t *testing.T) {
+	testenv.NeedsGoPackages(t)
+
+	dir := writeTree(t, `
+-- go.mod --
+module example.com
+go 1.24
+
+-- gen/gen.go --
+package gen
+
+type Seq[V any] func(yield func(V) bool)
+
+type Box[T any] struct{ v T }
+
+func (b Box[T]) Get() T { return b.v }
+
+-- dep/dep.go --
+package dep
+
+import (
+	"go/types"
+	"strings"
+	"example.com/gen"
+)
+
+func Items() gen.Seq[int] {
+	return func(yield func(int) bool) { yield(1) }
+}
+
+func Boxed() gen.Box[string] {
+	return gen.Box[string]{}
+}
+
+func Split(s string) {
+	for part := range strings.SplitSeq(s, ",") {
+		_ = part
+	}
+}
+
+func WalkTuple(tup *types.Tuple) {
+	for v := range tup.Variables() {
+		_ = v
+	}
+}
+
+-- p1/p1.go --
+package p1
+
+import (
+	"go/types"
+	"strings"
+	"example.com/dep"
+)
+
+func Use1(tup *types.Tuple, mset *types.MethodSet) string {
+	for x := range dep.Items() {
+		_ = x
+	}
+	for s := range strings.SplitSeq("a,b", ",") {
+		_ = s
+	}
+	for v := range tup.Variables() {
+		_ = v
+	}
+	for m := range mset.Methods() {
+		_ = m
+	}
+	return dep.Boxed().Get()
+}
+
+-- p2/p2.go --
+package p2
+
+import (
+	"go/types"
+	"strings"
+	"example.com/dep"
+)
+
+func Use2(tup *types.Tuple, mset *types.MethodSet) string {
+	for x := range dep.Items() {
+		_ = x
+	}
+	for s := range strings.SplitSeq("c,d", ",") {
+		_ = s
+	}
+	for v := range tup.Variables() {
+		_ = v
+	}
+	for m := range mset.Methods() {
+		_ = m
+	}
+	return dep.Boxed().Get()
+}
+
+-- p3/p3.go --
+package p3
+
+import (
+	"go/types"
+	"strings"
+	"example.com/dep"
+)
+
+func Use3(tup *types.Tuple, mset *types.MethodSet) string {
+	for x := range dep.Items() {
+		_ = x
+	}
+	for s := range strings.SplitSeq("e,f", ",") {
+		_ = s
+	}
+	for v := range tup.Variables() {
+		_ = v
+	}
+	for m := range mset.Methods() {
+		_ = m
+	}
+	return dep.Boxed().Get()
+}
+
+-- p4/p4.go --
+package p4
+
+import (
+	"go/types"
+	"strings"
+	"example.com/dep"
+)
+
+func Use4(tup *types.Tuple, mset *types.MethodSet) string {
+	for x := range dep.Items() {
+		_ = x
+	}
+	for s := range strings.SplitSeq("g,h", ",") {
+		_ = s
+	}
+	for v := range tup.Variables() {
+		_ = v
+	}
+	for m := range mset.Methods() {
+		_ = m
+	}
+	return dep.Boxed().Get()
+}
+`)
+
+	for _, mode := range []packages.LoadMode{packages.LoadSyntax, packages.LoadAllSyntax} {
+		pkgs, err := packages.Load(&packages.Config{
+			Dir:  dir,
+			Mode: mode,
+		}, "./p1", "./p2", "./p3", "./p4")
+		if err != nil {
+			t.Fatalf("Load(mode=%v): %v", mode, err)
+		}
+		if len(pkgs) != 4 {
+			t.Fatalf("len(pkgs) = %d, want 4", len(pkgs))
+		}
+		for _, pkg := range pkgs {
+			if len(pkg.Errors) > 0 {
+				t.Fatalf("pkg %s errors: %v", pkg.ID, pkg.Errors)
+			}
+		}
+	}
+}
+
+func TestLoadGenericMethodsAndIllTypedPolymorphicCycles(t *testing.T) {
+	testenv.NeedsGoPackages(t)
+
+	goVer := "1.24"
+	if testenv.Go1Point() >= 27 {
+		goVer = "1.27"
+	}
+	dir := writeTree(t, fmt.Sprintf(`
+-- go.mod --
+module example.com
+go %s
+
+-- nested/nested.go --
+package nested
+
+type Box[T any] struct{ v T }
+
+func (b Box[T]) Get() T { return b.v }
+
+var IntBox Box[int]
+var NestedBox Box[Box[Box[string]]]
+
+-- genmethod/genmethod.go --
+package genmethod
+
+type Box[T any] struct{ v T }
+
+func (b Box[T]) Map[U any](f func(T) U) Box[U] {
+	return Box[U]{v: f(b.v)}
+}
+
+var IntBox Box[int]
+
+-- illcycle/illcycle.go --
+package illcycle
+
+type A[T any] struct {
+	next *A[*T]
+}
+
+var X A[int]
+
+type B[T any] = *B[*T]
+
+var Y B[int]
+
+type C[T any] struct{}
+
+func (C[T]) M() *C[*T] { return nil }
+
+var Z C[int]
+`, goVer))
+
+	for _, mode := range []packages.LoadMode{packages.LoadSyntax, packages.LoadAllSyntax} {
+		nestedPkgs, err := packages.Load(&packages.Config{
+			Dir:  dir,
+			Mode: mode,
+		}, "./nested")
+		if err != nil {
+			t.Fatalf("Load(nested, mode=%v): %v", mode, err)
+		}
+		if len(nestedPkgs) != 1 || len(nestedPkgs[0].Errors) > 0 {
+			t.Fatalf("nested pkgs=%v errors=%v", nestedPkgs, nestedPkgs[0].Errors)
+		}
+
+		pkgs, err := packages.Load(&packages.Config{
+			Dir:  dir,
+			Mode: mode,
+		}, "./genmethod")
+		if err != nil {
+			t.Fatalf("Load(genmethod, mode=%v): %v", mode, err)
+		}
+		if len(pkgs) != 1 {
+			t.Fatalf("genmethod len(pkgs) = %d, want 1", len(pkgs))
+		}
+		if testenv.Go1Point() >= 27 && len(pkgs[0].Errors) > 0 {
+			t.Fatalf("genmethod errors=%v", pkgs[0].Errors)
+		}
+
+		illPkgs, err := packages.Load(&packages.Config{
+			Dir:  dir,
+			Mode: mode,
+		}, "./illcycle")
+		if err != nil {
+			t.Fatalf("Load(illcycle, mode=%v): %v", mode, err)
+		}
+		if len(illPkgs) != 1 || !illPkgs[0].IllTyped {
+			t.Fatalf("expected illcycle to be IllTyped, got %+v", illPkgs)
+		}
+	}
+}

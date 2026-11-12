@@ -1282,6 +1282,7 @@ func (ld *loader) loadPackage(lpkg *loaderPackage) {
 
 	typErr := types.NewChecker(tc, ld.Fset, lpkg.Types, lpkg.TypesInfo).Files(lpkg.Syntax)
 	lpkg.importErrors = nil // no longer needed
+	completePackageTypes(lpkg.Types, lpkg.TypesInfo)
 
 	// In go/types go1.21 and go1.22, Checker.Files failed fast with a
 	// a "too new" error, without calling tc.Error and without
@@ -1580,9 +1581,323 @@ func (ld *loader) loadFromExportData(lpkg *loaderPackage) error {
 		log.Panicf("golang.org/x/tools/go/packages: unexpected new packages during load of %s", lpkg.PkgPath)
 	}
 
+	for _, vpkg := range view {
+		if vpkg != nil && !vpkg.Complete() {
+			completePackageTypes(vpkg, nil)
+		}
+	}
+	completePackageTypes(tpkg, nil)
+
 	lpkg.Types = tpkg
 	lpkg.IllTyped = false
 	return nil
+}
+
+// maxOriginExpandDepth bounds active per-origin expansion depth inside
+// completePackageTypes so ill-typed polymorphic instantiation cycles
+// (e.g. type A[T any] struct { next *A[*T] }) cannot recurse without bound.
+const maxOriginExpandDepth = 4
+
+// typeListHasTypeParam reports whether any type in list references a free
+// *types.TypeParam without triggering lazy *types.Named expansion.
+func typeListHasTypeParam(list *types.TypeList) bool {
+	if list == nil || list.Len() == 0 {
+		return false
+	}
+	visited := make(map[types.Type]bool)
+	var hasTP func(t types.Type) bool
+	checkTuple := func(tup *types.Tuple) bool {
+		if tup == nil {
+			return false
+		}
+		for i, n := 0, tup.Len(); i < n; i++ {
+			if v := tup.At(i); v != nil && hasTP(v.Type()) {
+				return true
+			}
+		}
+		return false
+	}
+	checkList := func(tl *types.TypeList) bool {
+		if tl == nil {
+			return false
+		}
+		for i, n := 0, tl.Len(); i < n; i++ {
+			if hasTP(tl.At(i)) {
+				return true
+			}
+		}
+		return false
+	}
+	hasTP = func(t types.Type) bool {
+		if t == nil || visited[t] {
+			return false
+		}
+		visited[t] = true
+		switch t := t.(type) {
+		case *types.TypeParam:
+			return true
+		case *types.Basic:
+			return false
+		case *types.Pointer:
+			return hasTP(t.Elem())
+		case *types.Slice:
+			return hasTP(t.Elem())
+		case *types.Array:
+			return hasTP(t.Elem())
+		case *types.Chan:
+			return hasTP(t.Elem())
+		case *types.Map:
+			return hasTP(t.Key()) || hasTP(t.Elem())
+		case *types.Tuple:
+			return checkTuple(t)
+		case *types.Signature:
+			if recv := t.Recv(); recv != nil && hasTP(recv.Type()) {
+				return true
+			}
+			return checkTuple(t.Params()) || checkTuple(t.Results())
+		case *types.Struct:
+			for i, n := 0, t.NumFields(); i < n; i++ {
+				if f := t.Field(i); f != nil && hasTP(f.Type()) {
+					return true
+				}
+			}
+			return false
+		case *types.Interface:
+			for i, n := 0, t.NumExplicitMethods(); i < n; i++ {
+				if m := t.ExplicitMethod(i); m != nil && hasTP(m.Type()) {
+					return true
+				}
+			}
+			for i, n := 0, t.NumEmbeddeds(); i < n; i++ {
+				if hasTP(t.EmbeddedType(i)) {
+					return true
+				}
+			}
+			return false
+		case *types.Union:
+			for i, n := 0, t.Len(); i < n; i++ {
+				if term := t.Term(i); term != nil && hasTP(term.Type()) {
+					return true
+				}
+			}
+			return false
+		case *types.Alias:
+			if checkList(t.TypeArgs()) {
+				return true
+			}
+			if t.TypeParams() == nil && t.TypeArgs() == nil {
+				return hasTP(t.Rhs())
+			}
+			return false
+		case *types.Named:
+			return checkList(t.TypeArgs())
+		default:
+			return false
+		}
+	}
+	return checkList(list)
+}
+
+// completePackageTypes eagerly unpacks every *types.Named, *types.Alias,
+// *types.Interface, and *types.TypeParam reachable from pkg.Scope() and info
+// while pkg is still owned by a single loader goroutine, before dependent
+// packages or callers read pkg concurrently.
+//
+// In stock go/types (golang/go#79035), (*Named).cleanup() at the end of
+// Checker.Files skips n.Underlying() when n.inst != nil, leaving instantiated
+// generic *types.Named values (such as iter.Seq[T] on exported iterator
+// functions and methods) with n.fromRHS == nil (!n.stateHas(unpacked)) and
+// unexpanded methods. When two dependent packages later type-check calls or
+// range loops over that shared *types.Named concurrently, one Checker's
+// isComplete reads n.fromRHS without unpacking while another Checker's
+// Underlying or Method calls n.unpack() and writes n.fromRHS.
+func completePackageTypes(pkg *types.Package, info *types.Info) {
+	if pkg == nil || pkg == types.Unsafe {
+		return
+	}
+	defer func() {
+		// Ill-typed packages with invalid type cycles may panic in Underlying.
+		_ = recover()
+	}()
+	seen := make(map[types.Type]bool)
+	activeOrigins := make(map[types.Type]int)
+	var visitType func(t types.Type)
+	visitTypeParamList := func(list *types.TypeParamList) {
+		if list == nil {
+			return
+		}
+		for i, n := 0, list.Len(); i < n; i++ {
+			visitType(list.At(i))
+		}
+	}
+	visitTypeList := func(list *types.TypeList) {
+		if list == nil {
+			return
+		}
+		for i, n := 0, list.Len(); i < n; i++ {
+			visitType(list.At(i))
+		}
+	}
+	visitTuple := func(tup *types.Tuple) {
+		if tup == nil {
+			return
+		}
+		for i, n := 0, tup.Len(); i < n; i++ {
+			if v := tup.At(i); v != nil {
+				visitType(v.Type())
+			}
+		}
+	}
+	visitType = func(t types.Type) {
+		if t == nil || seen[t] {
+			return
+		}
+		seen[t] = true
+		switch t := t.(type) {
+		case *types.Basic:
+			return
+		case *types.Pointer:
+			visitType(t.Elem())
+		case *types.Slice:
+			visitType(t.Elem())
+		case *types.Array:
+			visitType(t.Elem())
+		case *types.Chan:
+			visitType(t.Elem())
+		case *types.Map:
+			visitType(t.Key())
+			visitType(t.Elem())
+		case *types.Tuple:
+			visitTuple(t)
+		case *types.Signature:
+			if recv := t.Recv(); recv != nil {
+				visitType(recv.Type())
+			}
+			visitTypeParamList(t.RecvTypeParams())
+			visitTypeParamList(t.TypeParams())
+			visitTuple(t.Params())
+			visitTuple(t.Results())
+		case *types.Struct:
+			for i, n := 0, t.NumFields(); i < n; i++ {
+				if f := t.Field(i); f != nil {
+					visitType(f.Type())
+				}
+			}
+		case *types.Interface:
+			t.Complete()
+			for i, n := 0, t.NumExplicitMethods(); i < n; i++ {
+				if m := t.ExplicitMethod(i); m != nil {
+					visitType(m.Type())
+				}
+			}
+			for i, n := 0, t.NumEmbeddeds(); i < n; i++ {
+				visitType(t.EmbeddedType(i))
+			}
+		case *types.Union:
+			for i, n := 0, t.Len(); i < n; i++ {
+				if term := t.Term(i); term != nil {
+					visitType(term.Type())
+				}
+			}
+		case *types.TypeParam:
+			_ = t.Underlying()
+			visitType(t.Constraint())
+		case *types.Alias:
+			if orig := t.Origin(); orig != nil && orig != t {
+				visitType(orig)
+			}
+			visitTypeParamList(t.TypeParams())
+			visitTypeList(t.TypeArgs())
+			origKey := types.Type(t)
+			if orig := t.Origin(); orig != nil {
+				origKey = orig
+			}
+			if activeOrigins[origKey] >= maxOriginExpandDepth {
+				return
+			}
+			activeOrigins[origKey]++
+			defer func() {
+				activeOrigins[origKey]--
+			}()
+			u := types.Unalias(t)
+			if u != nil {
+				_ = u.Underlying()
+			}
+			visitType(t.Rhs())
+			visitType(u)
+		case *types.Named:
+			if orig := t.Origin(); orig != nil && orig != t {
+				visitType(orig)
+			}
+			visitTypeParamList(t.TypeParams())
+			targs := t.TypeArgs()
+			visitTypeList(targs)
+			origKey := types.Type(t)
+			if orig := t.Origin(); orig != nil {
+				origKey = orig
+			}
+			if activeOrigins[origKey] >= maxOriginExpandDepth {
+				return
+			}
+			activeOrigins[origKey]++
+			defer func() {
+				activeOrigins[origKey]--
+			}()
+			u := t.Underlying()
+			if obj := t.Obj(); obj != nil && obj.Pkg() != nil && obj.Pkg() != pkg && obj.Pkg().Complete() && targs == nil {
+				return
+			}
+			visitType(u)
+			if targs != nil && typeListHasTypeParam(targs) {
+				return
+			}
+			for i, n := 0, t.NumMethods(); i < n; i++ {
+				if m := t.Method(i); m != nil {
+					visitType(m.Type())
+				}
+			}
+		}
+	}
+	if scope := pkg.Scope(); scope != nil {
+		for _, name := range scope.Names() {
+			if obj := scope.Lookup(name); obj != nil {
+				visitType(obj.Type())
+			}
+		}
+	}
+	if info != nil {
+		for _, tv := range info.Types {
+			visitType(tv.Type)
+		}
+		for _, inst := range info.Instances {
+			visitType(inst.Type)
+			visitTypeList(inst.TypeArgs)
+		}
+		for _, obj := range info.Defs {
+			if obj != nil {
+				visitType(obj.Type())
+			}
+		}
+		for _, obj := range info.Uses {
+			if obj != nil {
+				visitType(obj.Type())
+			}
+		}
+		for _, obj := range info.Implicits {
+			if obj != nil {
+				visitType(obj.Type())
+			}
+		}
+		for _, sel := range info.Selections {
+			if sel != nil {
+				visitType(sel.Recv())
+				visitType(sel.Type())
+				if obj := sel.Obj(); obj != nil {
+					visitType(obj.Type())
+				}
+			}
+		}
+	}
 }
 
 // impliedLoadMode returns loadMode with its dependencies.
